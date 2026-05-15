@@ -60,13 +60,12 @@ const RegisterPage = () => {
         'http://localhost:5000/api/auth/register',
         formData
       );
-
+     console.log(res.data);
       setMessage({
         text: 'Registration Successful!',
         type: 'success'
       });
 
-      localStorage.setItem('token', res.data.token);
 
       navigate('/login');
 
