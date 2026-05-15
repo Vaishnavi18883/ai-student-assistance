@@ -12,14 +12,14 @@ app.use(cors());
 app.use(express.json());
 
 
-// ---------------- HOME ROUTE ----------------
+// HOME ROUTE 
 
 app.get("/", (req, res) => {
   res.send("Server working");
 });
 
 
-// ---------------- AUTH API ----------------
+
 
 // Register API
 
@@ -27,11 +27,20 @@ app.post("/api/auth/register", (req, res) => {
 
   const { name, email, password } = req.body;
 
+  if (!name || !email || !password) {
+
+    return res.status(400).json({
+      message: "All fields are required"
+    });
+
+  }
+
   res.json({
     message: "Registration Successful",
     user: {
       name,
-      email
+      email,
+      role: "student"
     }
   });
 
@@ -44,17 +53,26 @@ app.post("/api/auth/login", (req, res) => {
 
   const { email, password } = req.body;
 
+  if (!email || !password) {
+
+    return res.status(400).json({
+      message: "All fields are required"
+    });
+
+  }
+
   res.json({
     message: "Login Successful",
     user: {
-      email
+      email,
+      role: "student"
     }
   });
 
 });
 
 
-// ---------------- LEARNER PROFILE API ----------------
+// LEARNER PROFILE API 
 
 app.post("/api/learner/add", (req, res) => {
 
@@ -68,17 +86,21 @@ app.post("/api/learner/add", (req, res) => {
 });
 
 
-// ---------------- TASK MANAGER API ----------------
+//TASK API
 
 // Add Task
+
+let tasks = [];
 
 app.post("/api/tasks/add", (req, res) => {
 
   const task = req.body;
 
+  tasks.push(task);
+
   res.json({
-    message: "Task Added",
-    task
+    message: "Task Added Successfully",
+    tasks
   });
 
 });
@@ -88,21 +110,30 @@ app.post("/api/tasks/add", (req, res) => {
 
 app.get("/api/tasks", (req, res) => {
 
-  res.json([
-    {
-      id: 1,
-      title: "Complete React Project"
-    },
-    {
-      id: 2,
-      title: "Study Node.js"
-    }
-  ]);
+  res.json(tasks);
 
 });
 
 
-// ---------------- AI CHAT API ----------------
+// Delete Task
+
+app.delete("/api/tasks/:id", (req, res) => {
+
+  const id = req.params.id;
+
+  tasks = tasks.filter(
+    (task, index) => index != id
+  );
+
+  res.json({
+    message: "Task Deleted",
+    tasks
+  });
+
+});
+
+
+// AI CHAT API 
 
 app.post("/api/chat", async (req, res) => {
 
@@ -154,7 +185,7 @@ app.post("/api/chat", async (req, res) => {
 });
 
 
-// ---------------- SERVER ----------------
+//SERVER 
 
 app.listen(5000, () => {
   console.log("Server running on 5000");

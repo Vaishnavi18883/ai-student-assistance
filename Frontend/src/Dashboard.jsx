@@ -1,5 +1,5 @@
 import React from "react"
-
+import { Link } from "react-router-dom"
 import ai from './assets/Gif/chatbot.gif'
 import task from './assets/Gif/task.gif'
 import profile from './assets/Gif/profile.gif'
@@ -12,25 +12,29 @@ function Dashboard() {
       title: 'AI Chat Assistant',
       desc: 'Ask doubts, generate notes and get AI-powered answers instantly.',
       image: ai,
-      btn: 'Open AI Chat'
+      btn: 'Open AI Chat',
+      path: '/aichat'
     },
     {
       title: 'Task Manager',
       desc: 'Create, update and manage your study tasks and reminders.',
       image: task,
-      btn: 'Manage Tasks'
+      btn: 'Manage Tasks',
+      path: '/taskmanager'
     },
     {
       title: 'Student Profile',
       desc: 'View your personal information and account details.',
       image: profile,
-      btn: 'View Profile'
+      btn: 'View Profile',
+      path: '/learnerprofile'
     },
     {
       title: 'Reports & Analytics',
       desc: 'Check activity reports, task statistics and AI history.',
       image: report,
-      btn: 'View Reports'
+      btn: 'View Reports',
+      path: '/studentreport'
     }
   ]
 
@@ -161,10 +165,13 @@ function Dashboard() {
               </p>
 
               {/* Button */}
+              <Link to={card.path}>
 
-              <button className="w-full bg-white text-black py-3 rounded-2xl font-semibold hover:bg-gray-200 transition-all duration-300">
-                {card.btn}
-              </button>
+                <button className="w-full bg-white text-black py-3 rounded-2xl font-semibold hover:bg-gray-200 transition-all duration-300">
+                  {card.btn}
+                </button>
+
+              </Link>
 
             </div>
 

@@ -2,30 +2,63 @@ import express from "express";
 
 const router = express.Router();
 
+
+// Register Route
+
 router.post("/register", (req, res) => {
 
-  const { name, email } = req.body;
+  const { name, email, password } = req.body;
+
+  // Validation
+
+  if (!name || !email || !password) {
+
+    return res.status(400).json({
+      message: "All fields are required"
+    });
+
+  }
 
   res.json({
+
     message: "Registration Successful",
+
     user: {
       name,
-      email
+      email,
+      role: "student"
     }
+
   });
 
 });
 
 
+// Login Route
+
 router.post("/login", (req, res) => {
 
-  const { email } = req.body;
+  const { email, password } = req.body;
+
+  // Validation
+
+  if (!email || !password) {
+
+    return res.status(400).json({
+      message: "All fields are required"
+    });
+
+  }
 
   res.json({
+
     message: "Login Successful",
+
     user: {
-      email
+      email,
+      role: "student"
     }
+
   });
 
 });

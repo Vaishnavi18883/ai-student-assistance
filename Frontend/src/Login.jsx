@@ -133,6 +133,7 @@ const LoginPage = () => {
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             className="w-full h-11 bg-gray-800 text-white rounded-md"
+             onClick={() => navigate('/dashboard')}
           >
             Login
           </motion.button>
