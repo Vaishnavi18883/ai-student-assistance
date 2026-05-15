@@ -1,6 +1,29 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
+import axios from 'axios'
 
 const TaskManager = () => {
+
+  useEffect(() => {
+    fetchTasks()
+  }, [])
+
+  const fetchTasks = async () => {
+
+    try {
+
+      const res = await axios.get(
+        "http://localhost:5000/api/tasks"
+      )
+
+      setTasks(res.data)
+
+    } catch (error) {
+
+      console.log(error)
+
+    }
+
+  }
 
   const [task, setTask] = useState({
     title: '',
@@ -11,6 +34,8 @@ const TaskManager = () => {
 
   const [tasks, setTasks] = useState([])
 
+  const [editIndex, setEditIndex] = useState(null)
+
   // Handle Input Change
   const handleChange = (e) => {
     setTask({
@@ -20,7 +45,8 @@ const TaskManager = () => {
   }
 
   // Add Task
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
+
     e.preventDefault()
 
     if (
@@ -32,23 +58,70 @@ const TaskManager = () => {
       return
     }
 
-    setTasks([...tasks, task])
+    try {
 
-    setTask({
-      title: '',
-      subject: '',
-      deadline: '',
-      status: 'Pending'
-    })
+      // UPDATE TASK
+      if (editIndex !== null) {
+
+        tasks[editIndex] = task
+
+        setTasks([...tasks])
+
+        setEditIndex(null)
+
+      }
+
+      // ADD TASK
+      else {
+
+        await axios.post(
+          "http://localhost:5000/api/tasks/add",
+          task
+        )
+
+        fetchTasks()
+
+      }
+
+      setTask({
+        title: '',
+        subject: '',
+        deadline: '',
+        status: 'Pending'
+      })
+
+    } catch (error) {
+
+      console.log(error)
+
+    }
+
   }
+  // Delete Tasks
+  const deleteTask = async (index) => {
 
-  // Delete Task
-  const deleteTask = (index) => {
-    const updatedTasks = tasks.filter(
-      (_, i) => i !== index
-    )
+    try {
 
-    setTasks(updatedTasks)
+      await axios.delete(
+        `http://localhost:5000/api/tasks/${index}`
+      )
+
+      fetchTasks()
+
+    } catch (error) {
+
+      console.log(error)
+
+    }
+
+  }
+  // Edit task
+  const editTask = (index) => {
+
+    setTask(tasks[index])
+
+    setEditIndex(index)
+
   }
 
   return (
@@ -209,26 +282,29 @@ const TaskManager = () => {
                   </p>
 
                   <p
-                    className={`mt-2 font-semibold ${
-                      item.status === 'Completed'
+                    className={`mt-2 font-semibold ${item.status === 'Completed'
                         ? 'text-green-400'
                         : 'text-yellow-400'
-                    }`}
+                      }`}
                   >
                     {item.status}
                   </p>
 
                 </div>
-
-                {/* Delete Button */}
-
+                <div className="flex gap-3">
                 <button
                   onClick={() => deleteTask(index)}
                   className="bg-red-500 hover:bg-red-600 px-5 py-2 rounded-xl transition-all duration-300"
                 >
                   Delete
                 </button>
-
+                <button
+                  onClick={() => editTask(index)}
+                  className="bg-blue-500 hover:bg-blue-600 px-5 py-2 rounded-xl transition-all duration-300"
+                >
+                  Edit
+                </button>
+              </div>
               </div>
 
             ))
