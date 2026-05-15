@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import axios from 'axios'
 
 const LearnerProfile = () => {
 
@@ -23,13 +24,39 @@ const LearnerProfile = () => {
 
   // Handle Submit
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async(e) => {
 
     e.preventDefault()
 
     console.log(learner)
 
     alert("Learner Profile Saved Successfully")
+    try {
+
+  const res = await axios.post(
+    "http://localhost:5000/api/learner/add",
+    learner
+  )
+
+  console.log(res.data)
+
+  alert("Learner Profile Saved Successfully")
+
+  setLearner({
+    name: '',
+    rollNo: '',
+    email: '',
+    password: '',
+    course: ''
+  })
+
+} catch (error) {
+
+  console.log(error)
+
+  alert("Something went wrong")
+
+}
 
     // Reset Form
 

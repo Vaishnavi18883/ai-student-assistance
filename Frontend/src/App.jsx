@@ -5,7 +5,7 @@ import LoginPage from './Login'
 import Dashboard from './Dashboard'
 import TaskManager from './Taskmanager'
 import AIChat from './Aichat'
-import LearnerProfile from './Studentprofile' 
+import LearnerProfile from './LearnerProfile' 
 import Reports from './Reports'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 
