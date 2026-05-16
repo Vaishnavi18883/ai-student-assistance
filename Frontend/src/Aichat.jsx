@@ -114,8 +114,6 @@ const AIChat = () => {
           ))
         )}
       </div>
-
-      {/* Main Chat Area */}
       <div className="flex-1 p-10 flex flex-col">
 
         <div className="mb-6">
@@ -124,8 +122,6 @@ const AIChat = () => {
             Ask questions and get AI-powered answers instantly
           </p>
         </div>
-
-        {/* Chat Window */}
         <div className="flex-1 overflow-y-auto bg-gray-800 rounded-3xl p-6 border border-gray-700 shadow-2xl">
 
           {history.length === 0 && (
@@ -137,14 +133,14 @@ const AIChat = () => {
           {history.map((chat, index) => (
             <div key={index} className="mb-6 space-y-3">
 
-              {/* User */}
+        
               <div className="flex justify-end">
                 <div className="bg-blue-500 px-4 py-3 rounded-2xl max-w-[70%]">
                   {chat.question}
                 </div>
               </div>
 
-              {/* AI */}
+          
               <div className="flex justify-start">
                 <div className="bg-gray-700 px-4 py-3 rounded-2xl max-w-[70%] whitespace-pre-wrap">
                   {chat.answer}
@@ -157,7 +153,6 @@ const AIChat = () => {
           <div ref={chatEndRef} />
         </div>
 
-        {/* Input Box */}
         <form onSubmit={handleSubmit} className="mt-6 flex gap-3">
           <textarea
             rows="2"

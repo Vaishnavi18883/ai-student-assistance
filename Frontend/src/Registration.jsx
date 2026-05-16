@@ -8,11 +8,11 @@ const RegisterPage = () => {
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
-    name: '',
+    username: '',
     email: '',
-    password: ''
+    password: '',
+    studentId: ''
   });
-
   const [message, setMessage] = useState({
     text: "",
     type: ""
@@ -28,7 +28,12 @@ const RegisterPage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!formData.name || !formData.email || !formData.password) {
+    if (
+      !formData.username ||
+      !formData.email ||
+      !formData.password ||
+      !formData.studentId
+    ) {
       setMessage({
         text: 'All fields are required!',
         type: 'error'
@@ -60,7 +65,7 @@ const RegisterPage = () => {
         'http://localhost:5000/api/auth/register',
         formData
       );
-     console.log(res.data);
+      console.log(res.data);
       setMessage({
         text: 'Registration Successful!',
         type: 'success'
@@ -100,15 +105,14 @@ const RegisterPage = () => {
 
           <input
             type="text"
-            name="name"
+            name="username"
             placeholder="Username"
-            value={formData.name}
+            value={formData.username}
             onChange={handleChange}
-            className="w-full h-11 mb-4 px-4 rounded-md border border-gray-300 
+            className="w-full h-11 mb-4 px-4 rounded-md border border-gray-300
             transition duration-300 ease-in-out hover:scale-105 
             hover:border-black outline-none"
           />
-
           <input
             type="email"
             name="email"
@@ -130,6 +134,14 @@ const RegisterPage = () => {
             transition duration-300 ease-in-out hover:scale-105 
             hover:border-black outline-none"
           />
+          <input
+            type="text"
+            name="studentId"
+            placeholder="Student ID"
+            value={formData.studentId}
+            onChange={handleChange}
+            className="w-full h-11 mb-4 px-4 rounded-md border border-gray-300"
+          />
 
           <motion.button
             type="submit"
@@ -141,11 +153,10 @@ const RegisterPage = () => {
           </motion.button>
 
           <p
-            className={`mt-4 font-medium ${
-              message.type === 'error'
-                ? 'text-red-500'
-                : 'text-green-600'
-            }`}
+            className={`mt-4 font-medium ${message.type === 'error'
+              ? 'text-red-500'
+              : 'text-green-600'
+              }`}
           >
             {message.text}
           </p>

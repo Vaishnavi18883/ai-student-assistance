@@ -6,9 +6,10 @@ const LearnerProfile = () => {
   const [learner, setLearner] = useState({
     name: '',
     rollNo: '',
-    email: '',
-    password: '',
-    course: ''
+    course: '',
+    department: '',
+    semester: '',
+    phone: ''
   })
 
   // Handle Change
@@ -24,7 +25,7 @@ const LearnerProfile = () => {
 
   // Handle Submit
 
-  const handleSubmit = async(e) => {
+  const handleSubmit = async (e) => {
 
     e.preventDefault()
 
@@ -33,39 +34,41 @@ const LearnerProfile = () => {
     alert("Learner Profile Saved Successfully")
     try {
 
-  const res = await axios.post(
-    "http://localhost:5000/api/learner/add",
-    learner
-  )
+      const res = await axios.post(
+        "http://localhost:5000/api/learner/add",
+        learner
+      )
 
-  console.log(res.data)
+      console.log(res.data)
 
-  alert("Learner Profile Saved Successfully")
+      alert("Learner Profile Saved Successfully")
 
-  setLearner({
-    name: '',
-    rollNo: '',
-    email: '',
-    password: '',
-    course: ''
-  })
+      setLearner({
+        name: '',
+        rollNo: '',
+        course: '',
+        department: '',
+        semester: '',
+        phone: ''
+      })
 
-} catch (error) {
+    } catch (error) {
 
-  console.log(error)
+      console.log(error)
 
-  alert("Something went wrong")
+      alert("Something went wrong")
 
-}
+    }
 
     // Reset Form
 
     setLearner({
       name: '',
       rollNo: '',
-      email: '',
-      password: '',
-      course: ''
+      course: '',
+      department: '',
+      semester: '',
+      phone: ''
     })
 
   }
@@ -154,24 +157,7 @@ const LearnerProfile = () => {
 
           </div>
 
-          {/* Password */}
 
-          <div>
-
-            <label className="block mb-2 text-lg">
-              Password
-            </label>
-
-            <input
-              type="password"
-              name="password"
-              placeholder="Enter password"
-              value={learner.password}
-              onChange={handleChange}
-              className="w-full p-3 rounded-xl bg-gray-900 border border-gray-600 outline-none focus:border-white"
-            />
-
-          </div>
 
           {/* Course */}
 
@@ -186,6 +172,64 @@ const LearnerProfile = () => {
               name="course"
               placeholder="Enter course"
               value={learner.course}
+              onChange={handleChange}
+              className="w-full p-3 rounded-xl bg-gray-900 border border-gray-600 outline-none focus:border-white"
+            />
+
+          </div>
+          {/* Department */}
+
+          <div>
+
+            <label className="block mb-2 text-lg">
+              Department
+            </label>
+
+            <input
+              type="text"
+              name="department"
+              placeholder="Enter department"
+              value={learner.department}
+              onChange={handleChange}
+              className="w-full p-3 rounded-xl bg-gray-900 border border-gray-600 outline-none focus:border-white"
+            />
+
+          </div>
+
+
+          {/* Semester */}
+
+          <div>
+
+            <label className="block mb-2 text-lg">
+              Semester
+            </label>
+
+            <input
+              type="text"
+              name="semester"
+              placeholder="Enter semester"
+              value={learner.semester}
+              onChange={handleChange}
+              className="w-full p-3 rounded-xl bg-gray-900 border border-gray-600 outline-none focus:border-white"
+            />
+
+          </div>
+
+
+          {/* Phone */}
+
+          <div className="md:col-span-2">
+
+            <label className="block mb-2 text-lg">
+              Phone
+            </label>
+
+            <input
+              type="text"
+              name="phone"
+              placeholder="Enter phone number"
+              value={learner.phone}
               onChange={handleChange}
               className="w-full p-3 rounded-xl bg-gray-900 border border-gray-600 outline-none focus:border-white"
             />

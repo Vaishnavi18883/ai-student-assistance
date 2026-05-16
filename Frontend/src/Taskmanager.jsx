@@ -29,7 +29,9 @@ const TaskManager = () => {
     title: '',
     subject: '',
     deadline: '',
-    status: 'Pending'
+    status: 'Pending',
+    learnerId: '',
+    createdAt: ''
   })
 
   const [tasks, setTasks] = useState([])
@@ -37,14 +39,18 @@ const TaskManager = () => {
   const [editIndex, setEditIndex] = useState(null)
 
   // Handle Input Change
+
   const handleChange = (e) => {
+
     setTask({
       ...task,
       [e.target.name]: e.target.value
     })
+
   }
 
-  // Add Task
+  // Handle Submit
+
   const handleSubmit = async (e) => {
 
     e.preventDefault()
@@ -54,40 +60,57 @@ const TaskManager = () => {
       !task.subject ||
       !task.deadline
     ) {
+
       alert("Please fill all fields")
       return
+
     }
 
     try {
 
+      const newTask = {
+        ...task,
+        learnerId: "12345",
+        createdAt: new Date()
+      }
+
       // UPDATE TASK
+
       if (editIndex !== null) {
 
-        tasks[editIndex] = task
+        await axios.put(
+          `http://localhost:5000/api/tasks/${editIndex}`,
+          newTask
+        )
 
-        setTasks([...tasks])
+        fetchTasks()
 
         setEditIndex(null)
 
       }
 
       // ADD TASK
+
       else {
 
         await axios.post(
           "http://localhost:5000/api/tasks/add",
-          task
+          newTask
         )
 
         fetchTasks()
 
       }
 
+      // Reset Form
+
       setTask({
         title: '',
         subject: '',
         deadline: '',
-        status: 'Pending'
+        status: 'Pending',
+        learnerId: '',
+        createdAt: ''
       })
 
     } catch (error) {
@@ -97,7 +120,9 @@ const TaskManager = () => {
     }
 
   }
-  // Delete Tasks
+
+  // Delete Task
+
   const deleteTask = async (index) => {
 
     try {
@@ -115,7 +140,9 @@ const TaskManager = () => {
     }
 
   }
-  // Edit task
+
+  // Edit Task
+
   const editTask = (index) => {
 
     setTask(tasks[index])
@@ -235,7 +262,11 @@ const TaskManager = () => {
             type="submit"
             className="w-full bg-white text-black py-3 rounded-2xl font-semibold hover:bg-gray-200 transition-all duration-300"
           >
-            Add Task
+
+            {editIndex !== null
+              ? "Update Task"
+              : "Add Task"}
+
           </button>
 
         </form>
@@ -282,29 +313,41 @@ const TaskManager = () => {
                   </p>
 
                   <p
-                    className={`mt-2 font-semibold ${item.status === 'Completed'
+                    className={`mt-2 font-semibold ${
+                      item.status === 'Completed'
                         ? 'text-green-400'
                         : 'text-yellow-400'
-                      }`}
+                    }`}
                   >
+
                     {item.status}
+
                   </p>
 
                 </div>
+
                 <div className="flex gap-3">
-                <button
-                  onClick={() => deleteTask(index)}
-                  className="bg-red-500 hover:bg-red-600 px-5 py-2 rounded-xl transition-all duration-300"
-                >
-                  Delete
-                </button>
-                <button
-                  onClick={() => editTask(index)}
-                  className="bg-blue-500 hover:bg-blue-600 px-5 py-2 rounded-xl transition-all duration-300"
-                >
-                  Edit
-                </button>
-              </div>
+
+                  {/* Delete Button */}
+
+                  <button
+                    onClick={() => deleteTask(index)}
+                    className="bg-red-500 hover:bg-red-600 px-5 py-2 rounded-xl transition-all duration-300"
+                  >
+                    Delete
+                  </button>
+
+                  {/* Edit Button */}
+
+                  <button
+                    onClick={() => editTask(index)}
+                    className="bg-blue-500 hover:bg-blue-600 px-5 py-2 rounded-xl transition-all duration-300"
+                  >
+                    Edit
+                  </button>
+
+                </div>
+
               </div>
 
             ))
@@ -316,6 +359,7 @@ const TaskManager = () => {
       </div>
 
     </div>
+
   )
 }
 

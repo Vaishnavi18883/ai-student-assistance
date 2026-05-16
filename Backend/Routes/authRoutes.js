@@ -7,11 +7,21 @@ const router = express.Router();
 
 router.post("/register", (req, res) => {
 
-  const { name, email, password } = req.body;
+  const {
+    username,
+    email,
+    password,
+    studentId
+  } = req.body;
 
   // Validation
 
-  if (!name || !email || !password) {
+  if (
+    !username ||
+    !email ||
+    !password ||
+    !studentId
+  ) {
 
     return res.status(400).json({
       message: "All fields are required"
@@ -24,8 +34,9 @@ router.post("/register", (req, res) => {
     message: "Registration Successful",
 
     user: {
-      name,
+      username,
       email,
+      studentId,
       role: "student"
     }
 
