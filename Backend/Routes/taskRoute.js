@@ -49,5 +49,17 @@ router.delete("/:id", (req, res) => {
   });
 
 });
+router.put("/:id", (req, res) => {
+
+  const id = req.params.id;
+
+  tasks[id] = req.body;
+
+  res.json({
+    message: "Task Updated",
+    tasks
+  });
+
+});
 
 export default router;
