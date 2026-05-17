@@ -2,10 +2,12 @@ import React, { useState } from 'react'
 import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'motion/react';
+import { useUser } from './context/UserContext'  
 
 const LoginPage = () => {
 
   const navigate = useNavigate();
+  const { login } = useUser()  
 
   const [formData, setFormData] = useState({
     email: '',
@@ -17,7 +19,6 @@ const LoginPage = () => {
     type: ""
   });
 
-  // Handle Input Change
   const handleChange = (e) => {
     setFormData({
       ...formData,
@@ -25,67 +26,47 @@ const LoginPage = () => {
     });
   };
 
-  // Handle Submit
   const handleSubmit = async (e) => {
-
     e.preventDefault();
 
-    // Validation
     if (!formData.email || !formData.password) {
-      setMessage({
-        text: 'All fields are required!',
-        type: 'error'
-      });
+      setMessage({ text: 'All fields are required!', type: 'error' });
       return;
     }
 
-    // Email Validation
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
     if (!emailRegex.test(formData.email)) {
-      setMessage({
-        text: 'Invalid email format',
-        type: 'error'
-      });
+      setMessage({ text: 'Invalid email format', type: 'error' });
       return;
     }
 
-    // Password Validation
     if (formData.password.length < 6) {
-      setMessage({
-        text: 'Password must be at least 6 characters',
-        type: 'error'
-      });
+      setMessage({ text: 'Password must be at least 6 characters', type: 'error' });
       return;
     }
 
     try {
-
       const res = await axios.post(
         'http://localhost:5000/api/auth/login',
         formData
       );
 
-      setMessage({
-        text: 'Login Successful!',
-        type: 'success'
-      });
-
-      // Store Token
       localStorage.setItem('token', res.data.token);
+      localStorage.setItem('user', JSON.stringify(res.data.user));
+      login(res.data.user);  
 
-      // Redirect
+      setMessage({ text: 'Login Successful!', type: 'success' });
       navigate('/dashboard');
 
     } catch (error) {
-
       setMessage({
         text: error.response?.data?.message || 'Login Failed',
         type: 'error'
       });
-
     }
   };
+
+
 
   return (
 

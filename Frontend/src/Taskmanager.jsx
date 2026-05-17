@@ -1,28 +1,22 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
+import { useUser } from './context/UserContext'
 
 const TaskManager = () => {
+
+  const { user } = useUser() 
 
   useEffect(() => {
     fetchTasks()
   }, [])
 
   const fetchTasks = async () => {
-
     try {
-
-      const res = await axios.get(
-        "http://localhost:5000/api/tasks"
-      )
-
+      const res = await axios.get("http://localhost:5000/api/tasks")
       setTasks(res.data)
-
     } catch (error) {
-
       console.log(error)
-
     }
-
   }
 
   const [task, setTask] = useState({
@@ -35,74 +29,45 @@ const TaskManager = () => {
   })
 
   const [tasks, setTasks] = useState([])
-
   const [editIndex, setEditIndex] = useState(null)
 
-  // Handle Input Change
-
   const handleChange = (e) => {
-
     setTask({
       ...task,
       [e.target.name]: e.target.value
     })
-
   }
 
-  // Handle Submit
-
   const handleSubmit = async (e) => {
-
     e.preventDefault()
 
-    if (
-      !task.title ||
-      !task.subject ||
-      !task.deadline
-    ) {
-
+    if (!task.title || !task.subject || !task.deadline) {
       alert("Please fill all fields")
       return
-
     }
 
     try {
 
       const newTask = {
         ...task,
-        learnerId: "12345",
+        learnerId: user?.id,  
         createdAt: new Date()
       }
 
-      // UPDATE TASK
-
       if (editIndex !== null) {
-
         await axios.put(
           `http://localhost:5000/api/tasks/${editIndex}`,
           newTask
         )
-
         fetchTasks()
-
         setEditIndex(null)
-
-      }
-
-      // ADD TASK
-
-      else {
-
+      } else {
         await axios.post(
           "http://localhost:5000/api/tasks/add",
           newTask
         )
-
         fetchTasks()
-
       }
-
-      // Reset Form
 
       setTask({
         title: '',
@@ -114,42 +79,24 @@ const TaskManager = () => {
       })
 
     } catch (error) {
-
       console.log(error)
-
     }
-
   }
-
-  // Delete Task
 
   const deleteTask = async (index) => {
-
     try {
-
-      await axios.delete(
-        `http://localhost:5000/api/tasks/${index}`
-      )
-
+      await axios.delete(`http://localhost:5000/api/tasks/${index}`)
       fetchTasks()
-
     } catch (error) {
-
       console.log(error)
-
     }
-
   }
-
-  // Edit Task
 
   const editTask = (index) => {
-
     setTask(tasks[index])
-
     setEditIndex(index)
-
   }
+
 
   return (
 

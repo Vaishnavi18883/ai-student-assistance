@@ -1,77 +1,54 @@
 import React, { useState } from 'react'
 import axios from 'axios'
+import { useUser } from './context/UserContext'  
 
 const LearnerProfile = () => {
 
+  const { user } = useUser()  
+
   const [learner, setLearner] = useState({
-    name: '',
-    rollNo: '',
+    name: user?.username || '',  
+    email: user?.email || '',      
+    rollNo: user?.studentId || '', 
     course: '',
     department: '',
     semester: '',
     phone: ''
   })
 
-  // Handle Change
-
   const handleChange = (e) => {
-
     setLearner({
       ...learner,
       [e.target.name]: e.target.value
     })
-
   }
 
-  // Handle Submit
-
   const handleSubmit = async (e) => {
-
     e.preventDefault()
-
-    console.log(learner)
-
-    alert("Learner Profile Saved Successfully")
     try {
-
       const res = await axios.post(
         "http://localhost:5000/api/learner/add",
         learner
       )
-
       console.log(res.data)
-
       alert("Learner Profile Saved Successfully")
-
       setLearner({
         name: '',
+        email: '',
         rollNo: '',
         course: '',
         department: '',
         semester: '',
         phone: ''
       })
-
     } catch (error) {
-
       console.log(error)
-
       alert("Something went wrong")
-
     }
-
-    // Reset Form
-
-    setLearner({
-      name: '',
-      rollNo: '',
-      course: '',
-      department: '',
-      semester: '',
-      phone: ''
-    })
-
   }
+
+
+  
 
   return (
 
