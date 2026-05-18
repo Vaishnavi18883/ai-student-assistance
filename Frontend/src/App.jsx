@@ -7,6 +7,7 @@ import TaskManager from './Taskmanager'
 import AIChat from './Aichat'
 import LearnerProfile from './LearnerProfile' 
 import Reports from './Reports'
+import StudyMaterials from './StudyMaterials'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 
 const App = () => {
@@ -21,6 +22,7 @@ const App = () => {
         <Route path='/taskmanager' element = {<TaskManager/>}></Route>
         <Route path='/aichat' element = {<AIChat/>}></Route>
         <Route path='/learnerprofile' element = {<LearnerProfile/>}></Route>
+        <Route path='/studyMaterials' element = {<StudyMaterials/>}></Route>
         <Route path='/studentreport' element = {<Reports/>}></Route>
 
       </Routes>

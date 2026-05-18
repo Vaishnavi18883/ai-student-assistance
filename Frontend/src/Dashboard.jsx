@@ -6,6 +6,7 @@ import ai from './assets/Gif/chatbot.gif'
 import task from './assets/Gif/task.gif'
 import profile from './assets/Gif/profile.gif'
 import report from './assets/Gif/report.gif'
+import notes from './assets/Gif/books.gif'
 
 function Dashboard() {
 
@@ -26,7 +27,7 @@ function Dashboard() {
     fetchTasks()
   }, [])
 
-  // ✅ Logout handler
+ 
   const handleLogout = () => {
     logout()
     navigate("/login")
@@ -37,20 +38,19 @@ function Dashboard() {
   const cards = [
     { title: 'AI Chat Assistant', desc: 'Ask doubts, generate notes and get AI-powered answers instantly.', image: ai, btn: 'Open AI Chat', path: '/aichat' },
     { title: 'Task Manager', desc: 'Create, update and manage your study tasks and reminders.', image: task, btn: 'Manage Tasks', path: '/taskmanager' },
+    {title: 'Study Materials',desc: 'Upload notes, download PDFs and manage subject-wise study materials.',image: notes,btn: 'Open Materials',path: '/studyMaterials'},
     { title: 'Student Profile', desc: 'View your personal information and account details.', image: profile, btn: 'View Profile', path: '/learnerprofile' },
     { title: 'Reports & Analytics', desc: 'Check activity reports, task statistics and AI history.', image: report, btn: 'View Reports', path: '/studentreport' }
   ]
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-500 via-gray-380 to-black text-white overflow-hidden">
-
-      {/* Navbar */}
       <nav className="w-full flex justify-between items-center px-10 py-5 border-b border-gray-500 backdrop-blur-lg">
         <div>
           <h1 className="text-3xl font-bold tracking-wide">AI Student Assistant</h1>
           <p className="text-gray-400 text-sm mt-1">Smart Learning & Productivity Platform</p>
         </div>
-        {/* ✅ Real logout */}
+       
         <button
           onClick={handleLogout}
           className="bg-red-400 hover:bg-red-500 transition-all duration-300 px-5 py-2 rounded-xl shadow-lg"
@@ -58,8 +58,6 @@ function Dashboard() {
           Logout
         </button>
       </nav>
-
-      {/* Hero Section */}
       <div className="px-10 py-12">
         <div className="bg-gradient-to-r from-gray-700 to-gray-600 rounded-3xl p-10 shadow-2xl border border-gray-700">
           <div className="flex flex-col md:flex-row justify-between items-center gap-10">

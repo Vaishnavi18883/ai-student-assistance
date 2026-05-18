@@ -1,11 +1,21 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
+import alert from './assets/Gif/notification.png'
 import { useUser } from './context/UserContext'
 
 const TaskManager = () => {
 
-  const { user } = useUser() 
+  const { user } = useUser()
 
+  const [task, setTask] = useState({
+    title: '',
+    subject: '',
+    deadline: '',
+    status: 'Pending'
+  })
+
+  const [tasks, setTasks] = useState([])
+  const [editId, setEditId] = useState(null)
   useEffect(() => {
     fetchTasks()
   }, [])
@@ -18,18 +28,6 @@ const TaskManager = () => {
       console.log(error)
     }
   }
-
-  const [task, setTask] = useState({
-    title: '',
-    subject: '',
-    deadline: '',
-    status: 'Pending',
-    learnerId: '',
-    createdAt: ''
-  })
-
-  const [tasks, setTasks] = useState([])
-  const [editIndex, setEditIndex] = useState(null)
 
   const handleChange = (e) => {
     setTask({
@@ -50,32 +48,31 @@ const TaskManager = () => {
 
       const newTask = {
         ...task,
-        learnerId: user?.id,  
-        createdAt: new Date()
+        learnerId: user?.id
       }
 
-      if (editIndex !== null) {
+      if (editId !== null) {
+
         await axios.put(
-          `http://localhost:5000/api/tasks/${editIndex}`,
+          `http://localhost:5000/api/tasks/${editId}`,
           newTask
         )
-        fetchTasks()
-        setEditIndex(null)
+        setEditId(null)
       } else {
+
         await axios.post(
           "http://localhost:5000/api/tasks/add",
           newTask
         )
-        fetchTasks()
       }
+
+      fetchTasks()
 
       setTask({
         title: '',
         subject: '',
         deadline: '',
-        status: 'Pending',
-        learnerId: '',
-        createdAt: ''
+        status: 'Pending'
       })
 
     } catch (error) {
@@ -83,56 +80,63 @@ const TaskManager = () => {
     }
   }
 
-  const deleteTask = async (index) => {
+
+  const deleteTask = async (id) => {
     try {
-      await axios.delete(`http://localhost:5000/api/tasks/${index}`)
+      await axios.delete(`http://localhost:5000/api/tasks/${id}`)
       fetchTasks()
     } catch (error) {
       console.log(error)
     }
   }
 
-  const editTask = (index) => {
-    setTask(tasks[index])
-    setEditIndex(index)
+
+  const editTask = (task) => {
+    setTask(task)
+    setEditId(task._id)
   }
 
 
-  return (
+  const getDeadlineMessage = (deadline) => {
 
+    const today = new Date();
+
+    const taskDate = new Date(deadline);
+
+    today.setHours(0, 0, 0, 0);
+    taskDate.setHours(0, 0, 0, 0);
+
+    const diff =
+      (taskDate - today) / (1000 * 60 * 60 * 24);
+
+    if (diff === 1) {
+      return `Deadline in ${diff} day(s)`;
+
+    } else if (diff === 0) {
+      return "Today is the last date for task completion";
+    }
+
+    else if (diff < 0) {
+      return "Deadline crossed";
+    }
+
+    else {
+      return "";
+    }
+
+  };
+  return (
     <div className="min-h-screen bg-gradient-to-br from-gray-700 via-gray-600 to-black text-white p-10">
 
-      {/* Heading */}
-
       <div className="text-center mb-10">
-
-        <h1 className="text-4xl font-bold">
-          Task Manager
-        </h1>
-
-        <p className="text-gray-400 mt-2">
-          Manage your academic tasks and reminders
-        </p>
-
+        <h1 className="text-4xl font-bold">Task Manager</h1>
+        <p className="text-gray-400 mt-2">Manage your academic tasks and reminders</p>
       </div>
-
-      {/* Form */}
-
       <div className="max-w-3xl mx-auto bg-gray-800 rounded-3xl p-8 shadow-2xl border border-gray-700">
-
-        <form
-          onSubmit={handleSubmit}
-          className="space-y-6"
-        >
-
-          {/* Task Title */}
+        <form onSubmit={handleSubmit} className="space-y-6">
 
           <div>
-
-            <label className="block mb-2 text-lg">
-              Task Title
-            </label>
-
+            <label className="block mb-2 text-lg">Task Title</label>
             <input
               type="text"
               name="title"
@@ -141,17 +145,10 @@ const TaskManager = () => {
               onChange={handleChange}
               className="w-full p-3 rounded-xl bg-gray-900 border border-gray-600 outline-none focus:border-white"
             />
-
           </div>
 
-          {/* Subject */}
-
           <div>
-
-            <label className="block mb-2 text-lg">
-              Subject
-            </label>
-
+            <label className="block mb-2 text-lg">Subject</label>
             <input
               type="text"
               name="subject"
@@ -160,17 +157,10 @@ const TaskManager = () => {
               onChange={handleChange}
               className="w-full p-3 rounded-xl bg-gray-900 border border-gray-600 outline-none focus:border-white"
             />
-
           </div>
 
-          {/* Deadline */}
-
           <div>
-
-            <label className="block mb-2 text-lg">
-              Deadline
-            </label>
-
+            <label className="block mb-2 text-lg">Deadline</label>
             <input
               type="date"
               name="deadline"
@@ -178,136 +168,184 @@ const TaskManager = () => {
               onChange={handleChange}
               className="w-full p-3 rounded-xl bg-gray-900 border border-gray-600 outline-none focus:border-white"
             />
-
           </div>
 
-          {/* Status */}
-
           <div>
-
-            <label className="block mb-2 text-lg">
-              Status
-            </label>
-
+            <label className="block mb-2 text-lg">Status</label>
             <select
               name="status"
               value={task.status}
               onChange={handleChange}
               className="w-full p-3 rounded-xl bg-gray-900 border border-gray-600 outline-none focus:border-white"
             >
-
-              <option>Pending</option>
-              <option>Completed</option>
-
+              <option value="Pending">Pending</option>
+              <option value="Completed">Completed</option>
             </select>
-
           </div>
-
-          {/* Button */}
 
           <button
             type="submit"
             className="w-full bg-white text-black py-3 rounded-2xl font-semibold hover:bg-gray-200 transition-all duration-300"
           >
-
-            {editIndex !== null
-              ? "Update Task"
-              : "Add Task"}
-
+            {editId !== null ? "Update Task" : "Add Task"}
           </button>
 
         </form>
-
       </div>
-
-      {/* Task List */}
-
       <div className="max-w-5xl mx-auto mt-14">
 
-        <h2 className="text-3xl font-bold mb-6">
-          Task List
-        </h2>
+  <h2 className="text-3xl font-bold mb-6">
+    Task List
+  </h2>
 
-        <div className="grid gap-6">
+  <div className="grid gap-6">
 
-          {tasks.length === 0 ? (
+    {
+      [...tasks]
 
-            <div className="bg-gray-800 p-6 rounded-2xl text-center text-gray-400 border border-gray-700">
-              No tasks added yet
-            </div>
+        .sort((a, b) => {
+          if (
+            a.status === "Completed" &&
+            b.status !== "Completed"
+          ) {
+            return 1;
+          }
 
-          ) : (
+          if (
+            a.status !== "Completed" &&
+            b.status === "Completed"
+          ) {
+            return -1;
+          }
 
-            tasks.map((item, index) => (
+          return (
+            new Date(a.deadline) -
+            new Date(b.deadline)
+          );
 
-              <div
-                key={index}
-                className="bg-gray-800 border border-gray-700 rounded-2xl p-6 flex flex-col md:flex-row justify-between items-start md:items-center gap-5 shadow-xl"
-              >
+        })
 
-                <div>
+        .length === 0 ? (
 
-                  <h3 className="text-2xl font-bold">
-                    {item.title}
-                  </h3>
+        <div className="bg-gray-800 p-6 rounded-2xl text-center text-gray-400 border border-gray-700">
 
-                  <p className="text-gray-400 mt-2">
-                    Subject: {item.subject}
-                  </p>
-
-                  <p className="text-gray-400">
-                    Deadline: {item.deadline}
-                  </p>
-
-                  <p
-                    className={`mt-2 font-semibold ${
-                      item.status === 'Completed'
-                        ? 'text-green-400'
-                        : 'text-yellow-400'
-                    }`}
-                  >
-
-                    {item.status}
-
-                  </p>
-
-                </div>
-
-                <div className="flex gap-3">
-
-                  {/* Delete Button */}
-
-                  <button
-                    onClick={() => deleteTask(index)}
-                    className="bg-red-500 hover:bg-red-600 px-5 py-2 rounded-xl transition-all duration-300"
-                  >
-                    Delete
-                  </button>
-
-                  {/* Edit Button */}
-
-                  <button
-                    onClick={() => editTask(index)}
-                    className="bg-blue-500 hover:bg-blue-600 px-5 py-2 rounded-xl transition-all duration-300"
-                  >
-                    Edit
-                  </button>
-
-                </div>
-
-              </div>
-
-            ))
-
-          )}
+          No tasks added yet
 
         </div>
 
-      </div>
+      ) : (
+
+        [...tasks]
+
+          .sort((a, b) => {
+
+            if (
+              a.status === "Completed" &&
+              b.status !== "Completed"
+            ) {
+              return 1;
+            }
+
+            if (
+              a.status !== "Completed" &&
+              b.status === "Completed"
+            ) {
+              return -1;
+            }
+
+            return (
+              new Date(a.deadline) -
+              new Date(b.deadline)
+            );
+
+          })
+
+          .map((item) => (
+
+            <div
+              key={item._id}
+              className="bg-gray-800 border border-gray-700 rounded-2xl p-6 flex flex-col md:flex-row justify-between items-start md:items-center gap-5 shadow-xl"
+            >
+
+              <div>
+
+                <h3 className="text-2xl font-bold">
+                  {item.title}
+                </h3>
+
+                <p className="text-gray-400 mt-2">
+                  Subject: {item.subject}
+                </p>
+
+                <p className="text-gray-400">
+                  Deadline: {item.deadline}
+                </p>
+
+                <p
+                  className={`mt-2 font-semibold ${
+                    item.status === "Completed"
+                      ? "text-green-400"
+                      : "text-yellow-400"
+                  }`}
+                >
+                  {item.status}
+                </p>
+
+                {
+                  getDeadlineMessage(item.deadline) &&
+                  item.status !== "Completed" && (
+
+                    <div className="mt-4 bg-red-500/20 border border-red-500 rounded-2xl px-4 py-3 flex items-center gap-3 shadow-lg">
+
+                      <img
+                        src={alert}
+                        alt="alert"
+                        className="w-8 h-8 object-contain"
+                      />
+
+                      <p className="text-red-300 font-semibold text-sm">
+
+                        {getDeadlineMessage(item.deadline)}
+
+                      </p>
+
+                    </div>
+
+                  )
+                }
+
+              </div>
+
+              <div className="flex gap-3">
+
+                <button
+                  onClick={() => deleteTask(item._id)}
+                  className="bg-red-500 hover:bg-red-600 px-5 py-2 rounded-xl transition-all duration-300"
+                >
+                  Delete
+                </button>
+
+                <button
+                  onClick={() => editTask(item)}
+                  className="bg-blue-500 hover:bg-blue-600 px-5 py-2 rounded-xl transition-all duration-300"
+                >
+                  Edit
+                </button>
+
+              </div>
+
+            </div>
+
+          ))
+
+      )
+
+    }
+    </div>  
+  </div>
 
     </div>
-
   )
-}
+} 
 
 export default TaskManager

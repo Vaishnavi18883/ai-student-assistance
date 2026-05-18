@@ -21,15 +21,12 @@ const Reports = () => {
   const completed = tasks.filter(t => t.status === 'Completed').length
   const pending = tasks.filter(t => t.status === 'Pending').length
 
-  // ✅ Real stats
   const reports = [
     { title: "Total Tasks",     value: tasks.length },
     { title: "Completed Tasks", value: completed },
     { title: "Pending Tasks",   value: pending },
     { title: "AI Queries",      value: "—" }
   ]
-
-  // ✅ Real activity from tasks
   const activities = tasks.slice(-5).reverse().map(t => ({
     learner: t.learnerId || "Student",
     activity: `${t.status === 'Completed' ? 'Completed' : 'Added'} task: ${t.title}`,
@@ -43,8 +40,6 @@ const Reports = () => {
         <h1 className="text-5xl font-bold">Reports & Analytics</h1>
         <p className="text-gray-400 mt-3 text-lg">Monitor learner activities and statistics</p>
       </div>
-
-      {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 mb-14">
         {reports.map((item, index) => (
           <div
@@ -56,8 +51,6 @@ const Reports = () => {
           </div>
         ))}
       </div>
-
-      {/* Activity Table */}
       <div className="bg-gray-800 border border-gray-700 rounded-3xl p-8 shadow-2xl overflow-x-auto">
         <h2 className="text-3xl font-bold mb-8">Recent Activities</h2>
         <table className="w-full">
