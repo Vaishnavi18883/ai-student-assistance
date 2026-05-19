@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useUser } from "./context/UserContext";
+import { Link } from "react-router-dom";
 
 function StudyMaterials() {
 
@@ -116,170 +117,182 @@ function StudyMaterials() {
 
   };
 
+  const inputClasses = "w-full p-4 rounded-xl bg-sky-100 border border-sky-200 outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100 transition-all text-slate-800";
+
   return (
 
-    <div className="min-h-screen bg-gradient-to-br from-black via-gray-900 to-gray-800 text-white p-8">
+    <div className="min-h-screen bg-app-gradient text-slate-800 font-sans pb-16">
 
-      {/* Heading */}
+      {/* Topbar */}
+      <nav className="bg-white border-b border-sky-100 sticky top-0 z-10 shadow-sm">
+        <div className="max-w-6xl mx-auto px-6 h-14 flex items-center gap-3">
+          <Link to="/dashboard" className="text-slate-400 hover:text-sky-600 text-xl leading-none transition-colors">←</Link>
+          <span className="font-semibold text-base text-slate-800">📚 Study Materials</span>
+        </div>
+      </nav>
 
-      <div className="mb-10">
+      <div className="max-w-6xl mx-auto px-6 pt-10">
+        {/* Heading */}
 
-        <h1 className="text-5xl font-bold mb-3 tracking-wide">
-          Study Materials 📚
-        </h1>
+        <div className="mb-10 text-center">
 
-        <p className="text-gray-400 text-lg">
-          Upload, manage and access your study notes anytime.
-        </p>
+          <h1 className="text-4xl font-extrabold mb-3 tracking-wide text-slate-800">
+            Study Materials
+          </h1>
 
-      </div>
+          <p className="text-slate-500 text-lg">
+            Upload, manage and access your study notes anytime.
+          </p>
 
-      {/* Upload Section */}
+        </div>
 
-      <div className="bg-white/10 backdrop-blur-lg border border-gray-700 rounded-3xl shadow-2xl p-8 mb-12">
+        {/* Upload Section */}
 
-        <h2 className="text-3xl font-semibold mb-6">
-          Upload Notes
-        </h2>
+        <div className="bg-white border border-sky-100 rounded-2xl shadow-lg shadow-sky-100/50 p-8 mb-12 max-w-4xl mx-auto">
 
-        <form
-          onSubmit={handleSubmit}
-          className="grid md:grid-cols-2 gap-6"
-        >
+          <h2 className="text-xl font-bold mb-6 text-slate-800 border-b border-sky-50 pb-4">
+            Upload New Notes
+          </h2>
 
-          <input
-            type="text"
-            name="title"
-            placeholder="Enter Title"
-            value={formData.title}
-            onChange={handleChange}
-            className="p-4 rounded-2xl bg-gray-900 border border-gray-600 outline-none focus:border-white"
-            required
-          />
-
-          <input
-            type="text"
-            name="subject"
-            placeholder="Enter Subject"
-            value={formData.subject}
-            onChange={handleChange}
-            className="p-4 rounded-2xl bg-gray-900 border border-gray-600 outline-none focus:border-white"
-            required
-          />
-
-          <textarea
-            name="description"
-            placeholder="Enter Description"
-            value={formData.description}
-            onChange={handleChange}
-            className="md:col-span-2 p-4 rounded-2xl bg-gray-900 border border-gray-600 outline-none focus:border-white h-32 resize-none"
-            required
-          />
-
-          <div className="md:col-span-2">
-
-            <label className="block mb-3 text-lg font-medium">
-              Upload PDF
-            </label>
+          <form
+            onSubmit={handleSubmit}
+            className="grid md:grid-cols-2 gap-6"
+          >
 
             <input
-              type="file"
-              accept="application/pdf"
-              onChange={(e) => setPdf(e.target.files[0])}
-              className="w-full bg-gray-900 border border-gray-600 rounded-2xl p-3"
+              type="text"
+              name="title"
+              placeholder="Enter Title"
+              value={formData.title}
+              onChange={handleChange}
+              className={inputClasses}
               required
             />
 
-          </div>
+            <input
+              type="text"
+              name="subject"
+              placeholder="Enter Subject"
+              value={formData.subject}
+              onChange={handleChange}
+              className={inputClasses}
+              required
+            />
 
-          <button
-            type="submit"
-            className="md:col-span-2 bg-white text-black py-4 rounded-2xl font-bold text-lg hover:bg-gray-200 hover:scale-[1.02] transition-all duration-300 shadow-xl"
-          >
-            Upload Material
-          </button>
+            <textarea
+              name="description"
+              placeholder="Enter Description"
+              value={formData.description}
+              onChange={handleChange}
+              className={`${inputClasses} md:col-span-2 h-32 resize-none`}
+              required
+            />
 
-        </form>
+            <div className="md:col-span-2">
 
-      </div>
+              <label className="block mb-2 text-sm font-semibold text-slate-600">
+                Upload PDF
+              </label>
 
-      {/* Materials */}
+              <input
+                type="file"
+                accept="application/pdf"
+                onChange={(e) => setPdf(e.target.files[0])}
+                className="w-full bg-sky-100 border border-sky-200 text-slate-600 rounded-xl p-3 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-sky-200 file:text-sky-700 hover:file:bg-sky-300 transition-all cursor-pointer"
+                required
+              />
 
-      <div>
+            </div>
 
-        <h2 className="text-3xl font-bold mb-8">
-          Uploaded Materials
-        </h2>
+            <button
+              type="submit"
+              className="md:col-span-2 bg-sky-600 text-white py-4 rounded-xl font-bold text-base hover:bg-sky-700 active:scale-[0.98] transition-all duration-300 shadow-md hover:shadow-lg"
+            >
+              Upload Material
+            </button>
 
-        {materials.length === 0 ? (
+          </form>
 
-          <div className="bg-gray-800 border border-gray-700 rounded-3xl p-10 text-center text-gray-400 text-xl">
-            No Materials Uploaded Yet
-          </div>
+        </div>
 
-        ) : (
+        {/* Materials */}
 
-          <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-8">
+        <div>
 
-            {materials.map((item) => (
+          <h2 className="text-2xl font-bold mb-6 text-slate-800">
+            Your Uploaded Materials
+          </h2>
 
-              <div
-                key={item._id}
-                className="bg-gradient-to-br from-gray-800 to-gray-900 border border-gray-700 rounded-3xl p-7 shadow-2xl hover:-translate-y-2 hover:shadow-black/50 transition-all duration-500"
-              >
+          {materials.length === 0 ? (
 
-                <div className="flex justify-between items-start mb-5">
+            <div className="bg-white border border-sky-100 rounded-2xl p-12 text-center text-slate-500 shadow-sm text-lg">
+              No Materials Uploaded Yet
+            </div>
 
-                  <div>
+          ) : (
 
-                    <h3 className="text-2xl font-bold">
-                      {item.title}
-                    </h3>
+            <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-6">
 
-                    <p className="text-blue-400 mt-1">
-                      {item.subject}
-                    </p>
+              {materials.map((item) => (
+
+                <div
+                  key={item._id}
+                  className="bg-white border border-sky-100 rounded-2xl p-6 shadow-sm hover:shadow-md hover:border-sky-300 transition-all duration-300 flex flex-col"
+                >
+
+                  <div className="flex justify-between items-start mb-4">
+
+                    <div>
+
+                      <h3 className="text-lg font-bold text-slate-800 line-clamp-1">
+                        {item.title}
+                      </h3>
+
+                      <span className="inline-block bg-sky-100 text-sky-700 text-xs font-semibold px-2 py-1 rounded-md mt-1.5">
+                        {item.subject}
+                      </span>
+
+                    </div>
+
+                    <div className="text-3xl bg-sky-50 p-2 rounded-xl text-sky-500">
+                      📄
+                    </div>
 
                   </div>
 
-                  <div className="text-4xl">
-                    📄
+                  <p className="text-slate-500 text-sm leading-relaxed mb-6 flex-1 line-clamp-3">
+                    {item.description}
+                  </p>
+
+                  <div className="flex gap-3 mt-auto">
+
+                    <a
+                      href={`http://localhost:5000/${item.fileUrl}`}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="flex-1 bg-sky-50 hover:bg-sky-100 text-sky-700 border border-sky-200 text-center py-2.5 rounded-xl font-semibold text-sm transition-all"
+                    >
+                      Open PDF
+                    </a>
+
+                    <button
+                      onClick={() => deleteMaterial(item._id)}
+                      className="flex-1 bg-red-50 hover:bg-red-100 text-red-600 border border-red-200 py-2.5 rounded-xl font-semibold text-sm transition-all"
+                    >
+                      Delete
+                    </button>
+
                   </div>
 
                 </div>
 
-                <p className="text-gray-400 leading-relaxed mb-8">
-                  {item.description}
-                </p>
+              ))}
 
-                <div className="flex gap-4">
+            </div>
 
-                  <a
-                    href={`http://localhost:5000/${item.fileUrl}`}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="flex-1 bg-blue-500 hover:bg-blue-600 text-center py-3 rounded-2xl font-semibold transition-all"
-                  >
-                    Open PDF
-                  </a>
+          )}
 
-                  <button
-                    onClick={() => deleteMaterial(item._id)}
-                    className="flex-1 bg-red-500 hover:bg-red-600 py-3 rounded-2xl font-semibold transition-all"
-                  >
-                    Delete
-                  </button>
-
-                </div>
-
-              </div>
-
-            ))}
-
-          </div>
-
-        )}
-
+        </div>
       </div>
 
     </div>

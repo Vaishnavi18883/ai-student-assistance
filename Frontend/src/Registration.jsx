@@ -1,181 +1,89 @@
 import React, { useState } from 'react'
-import axios from 'axios';
-import { motion } from "motion/react";
-import { Link, useNavigate } from 'react-router-dom';
+import axios from 'axios'
+import { Link, useNavigate } from 'react-router-dom'
 
 const RegisterPage = () => {
+  const navigate = useNavigate()
+  const [formData, setFormData] = useState({ username: '', email: '', password: '', studentId: '' })
+  const [message, setMessage] = useState({ text: '', type: '' })
+  const [loading, setLoading] = useState(false)
 
-  const navigate = useNavigate();
-
-  const [formData, setFormData] = useState({
-    username: '',
-    email: '',
-    password: '',
-    studentId: ''
-  });
-  const [message, setMessage] = useState({
-    text: "",
-    type: ""
-  });
-
-  const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value
-    });
-  };
+  const handleChange = (e) => setFormData({ ...formData, [e.target.name]: e.target.value })
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    if (
-      !formData.username ||
-      !formData.email ||
-      !formData.password ||
-      !formData.studentId
-    ) {
-      setMessage({
-        text: 'All fields are required!',
-        type: 'error'
-      });
-      return;
+    e.preventDefault()
+    if (!formData.username || !formData.email || !formData.password || !formData.studentId) {
+      setMessage({ text: 'All fields are required!', type: 'error' }); return
     }
-
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
     if (!emailRegex.test(formData.email)) {
-      setMessage({
-        text: 'Invalid email format',
-        type: 'error'
-      });
-      return;
+      setMessage({ text: 'Invalid email format', type: 'error' }); return
     }
-
     if (formData.password.length < 6) {
-      setMessage({
-        text: 'Password must be at least 6 characters',
-        type: 'error'
-      });
-      return;
+      setMessage({ text: 'Password must be at least 6 characters', type: 'error' }); return
     }
-
+    setLoading(true)
     try {
-
-      const res = await axios.post(
-        'http://localhost:5000/api/auth/register',
-        formData
-      );
-      console.log(res.data);
-      setMessage({
-        text: 'Registration Successful!',
-        type: 'success'
-      });
-
-
-      navigate('/login');
-
+      await axios.post('http://localhost:5000/api/auth/register', formData)
+      setMessage({ text: 'Account created! Redirecting...', type: 'success' })
+      setTimeout(() => navigate('/login'), 1200)
     } catch (err) {
+      setMessage({ text: err.response?.data?.message || 'Something went wrong', type: 'error' })
+    } finally { setLoading(false) }
+  }
 
-      setMessage({
-        text: err.response?.data?.message || 'Something went wrong',
-        type: 'error'
-      });
-
-    }
-  };
+  const inputClasses = "w-full h-11 px-4 rounded-xl border border-sky-200 bg-sky-100 text-slate-800 text-sm outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100 transition-all";
 
   return (
+    <div className="font-sans min-h-screen bg-app-gradient flex items-center justify-center p-4 py-10">
+      <div className="bg-white border border-sky-100 rounded-2xl p-8 sm:p-10 w-full max-w-md shadow-xl shadow-sky-100/50">
 
-    <div className="flex justify-center items-center min-h-screen bg-gray-100">
+        <div className="text-center mb-8">
+          <div className="text-4xl mb-3 inline-block">📚</div>
+          <h1 className="text-2xl font-bold text-slate-800 mb-1">Create Account</h1>
+          <p className="text-slate-500 text-sm">Join the AI Student Assistant</p>
+        </div>
 
-      <div className="w-[90%] md:w-[35vw] bg-gray-200 rounded-xl shadow-xl p-8 flex flex-col items-center">
+        <form onSubmit={handleSubmit} className="space-y-4">
+          {[
+            { label: 'Username', name: 'username', type: 'text' },
+            { label: 'Email', name: 'email', type: 'email' },
+            { label: 'Password', name: 'password', type: 'password' },
+            { label: 'Student ID', name: 'studentId', type: 'text' },
+          ].map(f => (
+            <div key={f.name}>
+              <label className="block text-sm font-semibold text-slate-600 mb-1.5">{f.label}</label>
+              <input type={f.type} name={f.name} value={formData[f.name]}
+                onChange={handleChange}
+                className={inputClasses} required />
+            </div>
+          ))}
 
-        <h2 className="text-3xl font-bold mb-2">
-          AI Student Assistant
-        </h2>
+          {message.text && (
+            <div className={`p-3 rounded-xl text-sm font-medium border ${message.type === 'error'
+              ? "bg-red-50 text-red-600 border-red-100"
+              : "bg-emerald-50 text-emerald-600 border-emerald-100"
+              }`}>
+              {message.text}
+            </div>
+          )}
 
-        <h3 className="text-xl mb-6">
-          Create Account
-        </h3>
-
-        <form
-          onSubmit={handleSubmit}
-          className="w-full flex flex-col items-center"
-        >
-
-          <input
-            type="text"
-            name="username"
-            placeholder="Username"
-            value={formData.username}
-            onChange={handleChange}
-            className="w-full h-11 mb-4 px-4 rounded-md border border-gray-300
-            transition duration-300 ease-in-out hover:scale-105 
-            hover:border-black outline-none"
-          />
-          <input
-            type="email"
-            name="email"
-            placeholder="Email"
-            value={formData.email}
-            onChange={handleChange}
-            className="w-full h-11 mb-4 px-4 rounded-md border border-gray-300 
-            transition duration-300 ease-in-out hover:scale-105 
-            hover:border-black outline-none"
-          />
-
-          <input
-            type="password"
-            name="password"
-            placeholder="Password"
-            value={formData.password}
-            onChange={handleChange}
-            className="w-full h-11 mb-4 px-4 rounded-md border border-gray-300 
-            transition duration-300 ease-in-out hover:scale-105 
-            hover:border-black outline-none"
-          />
-          <input
-            type="text"
-            name="studentId"
-            placeholder="Student ID"
-            value={formData.studentId}
-            onChange={handleChange}
-            className="w-full h-11 mb-4 px-4 rounded-md border border-gray-300"
-          />
-
-          <motion.button
-            type="submit"
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            className="w-full h-11 bg-gray-800 text-white rounded-md"
-          >
-            Register
-          </motion.button>
-
-          <p
-            className={`mt-4 font-medium ${message.type === 'error'
-              ? 'text-red-500'
-              : 'text-green-600'
-              }`}
-          >
-            {message.text}
-          </p>
-
+          <button type="submit" disabled={loading}
+            className={`w-full h-12 mt-2 rounded-xl text-white font-bold text-sm tracking-wide transition-all shadow-md ${loading
+              ? "bg-sky-300 cursor-not-allowed shadow-none"
+              : "bg-sky-600 hover:bg-sky-700 hover:shadow-lg active:scale-[0.98]"
+              }`}>
+            {loading ? 'Creating...' : 'Create Account'}
+          </button>
         </form>
 
-        <p className="mt-4">
-          Already have an account?
-          <Link to="/login">
-            <span className="text-blue-600 font-semibold cursor-pointer">
-              {" "}Login
-            </span>
-          </Link>
+        <p className="text-center mt-6 text-sm text-slate-500">
+          Already have an account?{' '}
+          <Link to="/login" className="text-sky-600 font-bold hover:text-sky-700 hover:underline transition-colors">Sign in</Link>
         </p>
-
       </div>
-
     </div>
   )
 }
 
-export default RegisterPage;
+export default RegisterPage

@@ -92,112 +92,115 @@ const LearnerProfile = () => {
     }
   }
 
-  return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black text-white p-10">
+  const inputClasses = "w-full p-3 rounded-lg bg-sky-100 border border-sky-200 outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100 transition-all text-slate-700";
+  const labelClasses = "block mb-1.5 text-sm font-medium text-slate-600";
 
-      <div className="text-center mb-10">
-        <h1 className="text-5xl font-bold">Learner Profile</h1>
-        <p className="text-gray-400 mt-3 text-lg">Manage learner academic information</p>
+  return (
+    <div className="font-sans min-h-screen bg-app-gradient text-slate-900 py-12 px-4 sm:px-6">
+
+      <div className="max-w-4xl mx-auto mb-8 text-center">
+        <h1 className="text-4xl font-extrabold text-slate-800">Learner Profile</h1>
+        <p className="text-slate-500 mt-2 text-base">Manage your academic information seamlessly</p>
       </div>
 
-      <div className="max-w-4xl mx-auto bg-gray-800 border border-gray-700 rounded-3xl p-10 shadow-2xl">
-        <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="max-w-4xl mx-auto bg-white border border-sky-100 rounded-2xl p-8 sm:p-10 shadow-lg shadow-sky-100/50">
+        <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
 
           {/* Name */}
           <div>
-            <label className="block mb-2 text-lg">Name</label>
+            <label className={labelClasses}>Name</label>
             <input
               type="text"
               name="name"
               placeholder="Enter learner name"
               value={learner.name}
               onChange={handleChange}
-              className="w-full p-3 rounded-xl bg-gray-900 border border-gray-600 outline-none focus:border-white"
+              className={inputClasses}
             />
           </div>
 
           {/* Roll Number */}
           <div>
-            <label className="block mb-2 text-lg">Roll Number</label>
+            <label className={labelClasses}>Roll Number</label>
             <input
               type="text"
               name="rollNo"
               placeholder="Enter roll number"
               value={learner.rollNo}
               onChange={handleChange}
-              className="w-full p-3 rounded-xl bg-gray-900 border border-gray-600 outline-none focus:border-white"
+              className={inputClasses}
             />
           </div>
 
           {/* Email */}
           <div>
-            <label className="block mb-2 text-lg">Email</label>
+            <label className={labelClasses}>Email</label>
             <input
               type="email"
               name="email"
               placeholder="Enter email"
               value={learner.email}
               onChange={handleChange}
-              className="w-full p-3 rounded-xl bg-gray-900 border border-gray-600 outline-none focus:border-white"
+              className={inputClasses}
             />
           </div>
 
           {/* Course */}
           <div>
-            <label className="block mb-2 text-lg">Course</label>
+            <label className={labelClasses}>Course</label>
             <input
               type="text"
               name="course"
               placeholder="Enter course"
               value={learner.course}
               onChange={handleChange}
-              className="w-full p-3 rounded-xl bg-gray-900 border border-gray-600 outline-none focus:border-white"
+              className={inputClasses}
             />
           </div>
 
           {/* Department */}
           <div>
-            <label className="block mb-2 text-lg">Department</label>
+            <label className={labelClasses}>Department</label>
             <input
               type="text"
               name="department"
               placeholder="Enter department"
               value={learner.department}
               onChange={handleChange}
-              className="w-full p-3 rounded-xl bg-gray-900 border border-gray-600 outline-none focus:border-white"
+              className={inputClasses}
             />
           </div>
 
           {/* Semester */}
           <div>
-            <label className="block mb-2 text-lg">Semester</label>
+            <label className={labelClasses}>Semester</label>
             <input
               type="text"
               name="semester"
               placeholder="Enter semester"
               value={learner.semester}
               onChange={handleChange}
-              className="w-full p-3 rounded-xl bg-gray-900 border border-gray-600 outline-none focus:border-white"
+              className={inputClasses}
             />
           </div>
 
           {/* Phone */}
           <div className="md:col-span-2">
-            <label className="block mb-2 text-lg">Phone</label>
+            <label className={labelClasses}>Phone</label>
             <input
               type="text"
               name="phone"
               placeholder="Enter phone number"
               value={learner.phone}
               onChange={handleChange}
-              className="w-full p-3 rounded-xl bg-gray-900 border border-gray-600 outline-none focus:border-white"
+              className={inputClasses}
             />
           </div>
 
           {/* Submit Button */}
           <button
             type="submit"
-            className="md:col-span-2 bg-white text-black py-4 rounded-2xl text-lg font-semibold hover:bg-gray-200 transition-all duration-300"
+            className="md:col-span-2 mt-4 bg-sky-600 text-white py-3.5 rounded-xl text-base font-semibold hover:bg-sky-700 active:scale-[0.98] transition-all shadow-md hover:shadow-lg"
           >
             Save Learner Profile
           </button>

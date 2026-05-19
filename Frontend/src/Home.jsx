@@ -1,127 +1,81 @@
 import { motion } from "framer-motion";
 import { Link, useNavigate } from "react-router-dom";
+import chatbotGif from './assets/Gif/chatbot.gif'
+import booksGif from './assets/Gif/books.gif'
+import taskGif from './assets/Gif/task.gif'
 
 export default function HomePage() {
   const navigate = useNavigate();
-
   const isLoggedIn = localStorage.getItem("token");
 
   const handleProtectedRoute = (path) => {
-    if (!isLoggedIn) {
-      navigate("/login");
-    } else {
-      navigate(path);
-    }
+    if (!isLoggedIn) navigate("/login");
+    else navigate(path);
   };
 
   return (
-    <div className="min-h-screen bg-[#0f172a] text-white">
+    <div className="font-sans bg-app-gradient min-h-screen text-slate-900">
 
-      {/* Sticky Navbar */}
-      <nav className="sticky top-0 z-50 flex justify-between items-center px-8 py-4 bg-[#111c33]/80 backdrop-blur-md border-b border-white/10">
-        <h1 className="text-2xl font-bold tracking-wide">
-          Student AI Assistant
-        </h1>
-
-        <div className="hidden md:flex items-center space-x-6 text-white/70">
-          <Link to="/" className="hover:text-white transition">Home</Link>
-
-          <button onClick={() => handleProtectedRoute("/dashboard")} className="hover:text-white transition">
-            Dashboard
-          </button>
-
-          <button onClick={() => handleProtectedRoute("/aichat")} className="hover:text-white transition">
-            AI Chat
-          </button>
-
-          <Link to="/login" className="hover:text-white transition">Login</Link>
-
-          <Link
-            to="/register"
-            className="bg-gradient-to-r from-blue-500 to-indigo-500 text-white px-4 py-2 rounded-xl hover:opacity-90 transition"
-          >
-            Get Started
-          </Link>
+      {/* Navbar */}
+      <nav className="bg-white border-b border-sky-100 sticky top-0 z-50 shadow-sm">
+        <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
+          <span className="font-bold text-xl text-sky-700 tracking-tight">📚 Student AI</span>
+          <div className="flex gap-6 items-center">
+            <Link to="/" className="text-slate-600 hover:text-sky-600 font-medium transition-colors text-sm">Home</Link>
+            <button onClick={() => handleProtectedRoute("/dashboard")} className="text-slate-600 hover:text-sky-600 font-medium transition-colors text-sm">Dashboard</button>
+            <Link to="/login" className="text-slate-600 hover:text-sky-600 font-medium transition-colors text-sm">Login</Link>
+            <Link to="/register" className="bg-sky-600 hover:bg-sky-700 text-white px-5 py-2 rounded-lg text-sm font-bold shadow-md hover:shadow-lg transition-all active:scale-[0.98]">
+              Get Started
+            </Link>
+          </div>
         </div>
       </nav>
 
-      {/* Hero Section */}
-      <div className="flex flex-col items-center justify-center text-center px-6 mt-24">
-
+      {/* Hero */}
+      <div className="text-center px-6 pt-24 pb-20">
         <motion.h1
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          className="text-5xl md:text-6xl font-bold leading-tight"
+          transition={{ duration: 0.6 }}
+          className="text-5xl md:text-6xl font-extrabold mb-6 leading-tight text-slate-800"
         >
           Learn Smarter with AI
         </motion.h1>
-
-        <p className="mt-6 text-lg max-w-2xl text-white/60">
-          Your all-in-one AI study assistant for notes, chat, tasks, and exam preparation.
+        <p className="text-lg text-slate-500 max-w-2xl mx-auto mb-10 leading-relaxed">
+          Your all-in-one study assistant — chat, notes, tasks, and progress tracking.
         </p>
-
-        <div className="mt-8 flex flex-wrap gap-4 justify-center">
-
-          <button
-            onClick={() => handleProtectedRoute("/aichat")}
-            className="bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-xl font-semibold transition"
-          >
+        <div className="flex gap-4 justify-center flex-wrap">
+          <button onClick={() => handleProtectedRoute("/aichat")}
+            className="bg-sky-600 hover:bg-sky-700 text-white px-8 py-3 rounded-xl font-bold shadow-md hover:shadow-lg transition-all active:scale-[0.98]">
             Start AI Chat
           </button>
-
-          <Link
-            to="/register"
-            className="border border-white/20 px-6 py-3 rounded-xl hover:bg-white hover:text-black transition"
-          >
+          <Link to="/register"
+            className="bg-white hover:bg-sky-50 text-sky-700 border border-sky-200 px-8 py-3 rounded-xl font-bold shadow-sm hover:shadow transition-all active:scale-[0.98]">
             Create Account
           </Link>
-
-          <button
-            onClick={() => handleProtectedRoute("/dashboard")}
-            className="bg-white/10 border border-white/10 px-6 py-3 rounded-xl hover:bg-white/20 transition"
-          >
-            Open Dashboard
-          </button>
-
         </div>
       </div>
 
       {/* Features */}
-      <div className="grid md:grid-cols-3 gap-6 px-10 mt-24">
-
-        <div className="bg-[#111c33] border border-white/10 p-6 rounded-2xl hover:scale-105 transition">
-          <h2 className="text-xl font-semibold">📚 Instant Answers</h2>
-          <p className="mt-2 text-white/60">Get accurate explanations instantly.</p>
-        </div>
-
-        <div className="bg-[#111c33] border border-white/10 p-6 rounded-2xl hover:scale-105 transition">
-          <h2 className="text-xl font-semibold">🧠 AI Notes Generator</h2>
-          <p className="mt-2 text-white/60">Convert topics into structured notes.</p>
-        </div>
-
-        <div className="bg-[#111c33] border border-white/10 p-6 rounded-2xl hover:scale-105 transition">
-          <h2 className="text-xl font-semibold">🚀 Task & Reports</h2>
-          <p className="mt-2 text-white/60">Track tasks and monitor progress easily.</p>
-        </div>
-
+      <div className="max-w-5xl mx-auto px-6 pb-24 grid grid-cols-1 md:grid-cols-3 gap-6">
+        {[
+          { icon: chatbotGif, title: "Instant Answers", desc: "Get clear explanations on any subject topic right away." },
+          { icon: booksGif, title: "AI Notes", desc: "Turn topics into structured notes you can actually use." },
+          { icon: taskGif, title: "Task Tracker", desc: "Manage assignments and never miss a deadline again." },
+        ].map((f, i) => (
+          <div key={i} className="bg-white border border-sky-100 rounded-2xl p-8 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
+            <div className="mb-6 flex justify-center">
+              <img src={f.icon} alt={f.title} className="w-20 h-20 object-contain" />
+            </div>
+            <h3 className="mb-2 font-bold text-lg text-slate-800 text-center">{f.title}</h3>
+            <p className="m-0 text-slate-500 leading-relaxed text-sm text-center">{f.desc}</p>
+          </div>
+        ))}
       </div>
 
-      {/* Bottom Section */}
-      <div className="text-center mt-24 px-6">
-        <h2 className="text-3xl font-bold text-white">
-          Built for Students. Powered by AI.
-        </h2>
-        <p className="mt-4 text-white/60 max-w-2xl mx-auto">
-          A modern learning platform designed to improve productivity and simplify studying.
-        </p>
-      </div>
-
-      {/* Footer */}
-      <footer className="text-center mt-20 pb-10 text-white/40 border-t border-white/10 pt-6">
+      <footer className="text-center py-6 border-t border-sky-100 text-slate-400 text-sm">
         © 2026 Student AI Assistant
       </footer>
-
     </div>
   );
 }

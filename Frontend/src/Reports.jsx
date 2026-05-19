@@ -1,86 +1,97 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
+import { Link } from 'react-router-dom'
+import { useUser } from './context/UserContext'
 
 const Reports = () => {
-
+  const { user } = useUser()
   const [tasks, setTasks] = useState([])
 
-  // ✅ Fetch real tasks
   useEffect(() => {
-    const fetchTasks = async () => {
-      try {
-        const res = await axios.get("http://localhost:5000/api/tasks")
-        setTasks(res.data)
-      } catch (err) {
-        console.log(err)
-      }
+    if (user?.id) {
+      axios.get(`http://localhost:5000/api/tasks/user/${user.id}`)
+        .then(r => setTasks(r.data)).catch(console.log)
     }
-    fetchTasks()
-  }, [])
+  }, [user])
 
   const completed = tasks.filter(t => t.status === 'Completed').length
   const pending = tasks.filter(t => t.status === 'Pending').length
+  const rate = tasks.length > 0 ? Math.round((completed / tasks.length) * 100) : 0
 
-  const reports = [
-    { title: "Total Tasks",     value: tasks.length },
-    { title: "Completed Tasks", value: completed },
-    { title: "Pending Tasks",   value: pending },
-    { title: "AI Queries",      value: "—" }
+  const stats = [
+    { label: 'Total Tasks', value: tasks.length, textColor: "text-sky-600" },
+    { label: 'Completed', value: completed, textColor: "text-emerald-600" },
+    { label: 'Pending', value: pending, textColor: "text-amber-600" },
+    { label: 'Completion Rate', value: `${rate}%`, textColor: "text-indigo-600" },
   ]
-  const activities = tasks.slice(-5).reverse().map(t => ({
-    learner: t.learnerId || "Student",
-    activity: `${t.status === 'Completed' ? 'Completed' : 'Added'} task: ${t.title}`,
-    date: new Date(t.createdAt).toLocaleDateString()
-  }))
+
+  const recent = [...tasks].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)).slice(0, 8)
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black text-white p-10">
+    <div className="font-sans min-h-screen bg-app-gradient text-slate-900">
 
-      <div className="mb-10">
-        <h1 className="text-5xl font-bold">Reports & Analytics</h1>
-        <p className="text-gray-400 mt-3 text-lg">Monitor learner activities and statistics</p>
-      </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 mb-14">
-        {reports.map((item, index) => (
-          <div
-            key={index}
-            className="bg-gray-800 border border-gray-700 rounded-3xl p-8 shadow-2xl"
-          >
-            <h2 className="text-xl text-gray-400 mb-4">{item.title}</h2>
-            <h1 className="text-5xl font-bold">{item.value}</h1>
-          </div>
-        ))}
-      </div>
-      <div className="bg-gray-800 border border-gray-700 rounded-3xl p-8 shadow-2xl overflow-x-auto">
-        <h2 className="text-3xl font-bold mb-8">Recent Activities</h2>
-        <table className="w-full">
-          <thead>
-            <tr className="border-b border-gray-700 text-left">
-              <th className="pb-4">Learner</th>
-              <th className="pb-4">Activity</th>
-              <th className="pb-4">Date</th>
-            </tr>
-          </thead>
-          <tbody>
-            {activities.length === 0 ? (
-              <tr>
-                <td colSpan="3" className="py-6 text-center text-gray-400">
-                  No activities yet
-                </td>
-              </tr>
-            ) : (
-              activities.map((activity, index) => (
-                <tr key={index} className="border-b border-gray-700">
-                  <td className="py-5">{activity.learner}</td>
-                  <td className="py-5">{activity.activity}</td>
-                  <td className="py-5">{activity.date}</td>
+      <nav className="bg-white border-b border-sky-100 sticky top-0 z-10 shadow-sm">
+        <div className="max-w-5xl mx-auto px-6 h-14 flex items-center gap-3">
+          <Link to="/dashboard" className="text-slate-500 hover:text-sky-600 text-lg transition-colors">←</Link>
+          <span className="font-semibold text-base text-slate-800">📊 Reports & Analytics</span>
+        </div>
+      </nav>
+
+      <div className="max-w-5xl mx-auto py-8 px-6">
+
+        <div className="mb-6">
+          <h1 className="text-2xl font-bold text-slate-800 mb-1">Your Progress</h1>
+          <p className="text-sm text-slate-500">Overview of your task activity.</p>
+        </div>
+
+        {/* Stats */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+          {stats.map((s, i) => (
+            <div key={i} className="bg-white border border-sky-100 rounded-xl p-5 shadow-sm hover:shadow-md transition-shadow">
+              <p className={`text-3xl font-bold mb-1 ${s.textColor}`}>{s.value}</p>
+              <p className="text-sm text-slate-500">{s.label}</p>
+            </div>
+          ))}
+        </div>
+
+        {/* Recent activity table */}
+        <h2 className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-3">Recent Activity</h2>
+        <div className="bg-white border border-sky-100 rounded-xl overflow-hidden shadow-sm">
+          <div className="overflow-x-auto">
+            <table className="w-full text-left text-sm border-collapse">
+              <thead>
+                <tr className="bg-sky-50/50 border-b border-sky-100">
+                  {["Task", "Subject", "Status", "Deadline"].map(h => (
+                    <th key={h} className="p-4 text-xs font-semibold text-slate-500 uppercase tracking-wide">{h}</th>
+                  ))}
                 </tr>
-              ))
-            )}
-          </tbody>
-        </table>
+              </thead>
+              <tbody>
+                {recent.length === 0 ? (
+                  <tr>
+                    <td colSpan={4} className="text-center p-8 text-slate-400 text-sm">No activity yet</td>
+                  </tr>
+                ) : recent.map((t, i) => (
+                  <tr key={t._id} className={`border-b border-sky-50 last:border-none hover:bg-sky-50/30 transition-colors`}>
+                    <td className="p-4 font-medium text-slate-800">{t.title}</td>
+                    <td className="p-4 text-slate-500">{t.subject}</td>
+                    <td className="p-4">
+                      <span className={`text-xs font-semibold px-3 py-1 rounded-full border ${
+                        t.status === 'Completed' 
+                          ? 'bg-emerald-50 text-emerald-600 border-emerald-200' 
+                          : 'bg-amber-50 text-amber-600 border-amber-200'
+                      }`}>
+                        {t.status}
+                      </span>
+                    </td>
+                    <td className="p-4 text-slate-500 font-mono text-xs">{t.deadline}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
       </div>
-
     </div>
   )
 }
