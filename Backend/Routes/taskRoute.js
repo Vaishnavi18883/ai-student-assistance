@@ -1,65 +1,59 @@
 import express from "express";
+import Task from "../models/Task.js";  
 
 const router = express.Router();
 
+router.post("/add", async (req, res) => {
+  try {
+    const newTask = new Task(req.body);
+    await newTask.save();             
+    res.json({
+      message: "Task Added Successfully",
+      task: newTask
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: "Server Error" });
+  }
+});
 
-// Dummy Tasks Array
-
-let tasks = [];
-
-
-// Add Task
-
-router.post("/add", (req, res) => {
-
-  const task = req.body;
-
-  tasks.push(task);
-
-  res.json({
-    message: "Task Added Successfully",
-    tasks
-  });
-
+router.get("/", async (req, res) => {
+  try {
+    const tasks = await Task.find();   
+    res.json(tasks);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: "Server Error" });
+  }
 });
 
 
-// Get All Tasks
-
-router.get("/", (req, res) => {
-
-  res.json(tasks);
-
+router.put("/:id", async (req, res) => {
+  try {
+    const updated = await Task.findByIdAndUpdate(
+      req.params.id,
+      req.body,
+      { new: true }
+    );                                
+    res.json({
+      message: "Task Updated",
+      task: updated
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: "Server Error" });
+  }
 });
 
 
-// Delete Task
-
-router.delete("/:id", (req, res) => {
-
-  const id = req.params.id;
-
-  tasks = tasks.filter(
-    (task, index) => index != id
-  );
-
-  res.json({
-    message: "Task Deleted",
-    tasks
-  });
-
-});
-router.put("/:id", (req, res) => {
-
-  const id = req.params.id;
-
-  tasks[id] = req.body;
-
-  res.json({
-    message: "Task Updated",
-    tasks
-  });
-
+router.delete("/:id", async (req, res) => {
+  try {
+    await Task.findByIdAndDelete(req.params.id); 
+    res.json({ message: "Task Deleted" });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: "Server Error" });
+  }
 });
 
 export default router;

@@ -73,10 +73,10 @@ const TaskManager = () => {
 
       <div className="max-w-4xl mx-auto px-6 pt-8">
 
-        {/* Form */}
+     
         <div className="bg-white border border-sky-100 rounded-xl p-6 shadow-md shadow-sky-100/50 mb-8">
           <h2 className="text-lg font-bold text-slate-800 mb-5 flex items-center gap-2">
-            {editId ? '✏️ Edit Task' : '➕ Add New Task'}
+            {editId ? ' Edit Task' : 'Add New Task'}
           </h2>
           <form onSubmit={handleSubmit}>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-5">
@@ -116,7 +116,7 @@ const TaskManager = () => {
           </form>
         </div>
 
-        {/* Task list */}
+    
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-sm font-bold text-slate-500 uppercase tracking-wider">
             Your Tasks <span className="ml-1 bg-sky-100 text-sky-700 py-0.5 px-2 rounded-full text-xs">{sorted.length}</span>

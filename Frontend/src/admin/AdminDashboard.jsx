@@ -13,17 +13,14 @@ export const Sidebar = ({ admin, onLogout }) => {
   ]
   return (
     <aside className="w-64 min-h-screen bg-white border-r border-sky-100 flex flex-col shadow-sm">
-      {/* Logo */}
       <div className="px-6 py-6 border-b border-sky-50">
         <div className="flex items-center gap-3">
           <div className="w-8 h-8 bg-sky-600 rounded-lg flex items-center justify-center flex-shrink-0 shadow-sm">
             <span className="text-white text-sm font-black">A</span>
           </div>
-          <span className="text-slate-800 font-bold text-lg tracking-tight">AdminOS</span>
+          <span className="text-slate-800 font-bold text-lg tracking-tight">Admin </span>
         </div>
       </div>
-
-      {/* Nav */}
       <nav className="flex-1 px-4 py-6 space-y-1">
         <p className="text-slate-400 text-[10px] font-bold uppercase tracking-widest px-3 mb-4">Navigation</p>
         {links.map(l => {
@@ -42,7 +39,7 @@ export const Sidebar = ({ admin, onLogout }) => {
         })}
       </nav>
 
-      {/* User */}
+
       <div className="p-4 border-t border-sky-50">
         <div className="bg-sky-50 border border-sky-100 rounded-xl p-3 flex items-center gap-3 mb-3">
           <div className="w-8 h-8 bg-sky-200 rounded-full flex items-center justify-center flex-shrink-0 border border-sky-300">
@@ -100,7 +97,7 @@ const AdminDashboard = () => {
       <Sidebar admin={admin} onLogout={handleLogout} />
 
       <main className="flex-1 overflow-y-auto">
-        {/* Top bar */}
+  
         <div className="border-b border-sky-100 px-10 py-5 flex items-center justify-between bg-white sticky top-0 z-10 shadow-sm">
           <div>
             <h1 className="text-slate-800 font-bold text-lg">Dashboard</h1>
@@ -112,7 +109,7 @@ const AdminDashboard = () => {
         </div>
 
         <div className="px-10 py-8 max-w-7xl mx-auto">
-          {/* Welcome */}
+        
           <div className="mb-10">
             <h2 className="text-3xl font-extrabold text-slate-800 mb-2">
               Good morning, <span className="text-sky-600">{admin.username}</span> 👋
@@ -124,7 +121,7 @@ const AdminDashboard = () => {
             <div className="bg-red-50 border border-red-200 text-red-600 rounded-xl px-5 py-4 text-sm font-medium mb-8 shadow-sm">{error}</div>
           )}
 
-          {/* Stats */}
+          
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
             <StatCard label="Total Students" value={stats?.totalStudents} note="Registered accounts" accentText="text-blue-600" accentBg="bg-blue-400" />
             <StatCard label="Active Today" value={stats?.activeStudents} note="Login in last 24h" accentText="text-emerald-600" accentBg="bg-emerald-400" />
@@ -132,7 +129,7 @@ const AdminDashboard = () => {
             <StatCard label="Completed" value={stats?.completedTasks} note="Tasks marked done" accentText="text-amber-500" accentBg="bg-amber-400" />
           </div>
 
-          {/* Quick Actions */}
+          
           <div className="mb-8">
             <h3 className="text-slate-400 text-sm font-bold uppercase tracking-widest mb-5">Quick Actions</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">

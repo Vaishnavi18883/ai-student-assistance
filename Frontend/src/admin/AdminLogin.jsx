@@ -30,7 +30,6 @@ const AdminLogin = () => {
     <div style={{ fontFamily: "'Inter', sans-serif" }}
       className="min-h-screen bg-app-gradient flex">
 
-      {/* Left branding panel */}
       <div className="hidden lg:flex flex-col justify-between w-[45%] bg-zinc-900 border-r border-zinc-800 p-12">
         <div>
           <div className="flex items-center gap-2 mb-2">
@@ -56,7 +55,7 @@ const AdminLogin = () => {
         </div>
       </div>
 
-      {/* Right login panel */}
+  
       <div className="flex-1 flex items-center justify-center p-8">
         <div className="w-full max-w-sm">
 
