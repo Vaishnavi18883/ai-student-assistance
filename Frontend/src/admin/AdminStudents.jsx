@@ -16,6 +16,7 @@ const AdminStudents = () => {
   const [form, setForm] = useState({ username: '', email: '', password: '', studentId: '' })
   const [msg, setMsg] = useState({ text: '', type: '' })
   const [search, setSearch] = useState('')
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false)
 
   useEffect(() => {
     if (!token) { navigate('/admin/login'); return }
@@ -81,14 +82,19 @@ const AdminStudents = () => {
 
   return (
     <div className="font-sans min-h-screen bg-app-gradient text-slate-800 flex">
-      <Sidebar admin={admin} onLogout={handleLogout} />
+      <Sidebar admin={admin} onLogout={handleLogout} isOpen={isSidebarOpen} setIsOpen={setIsSidebarOpen} />
 
       <main className="flex-1 overflow-y-auto">
         {/* Topbar */}
-        <div className="border-b border-sky-100 px-10 py-5 flex items-center justify-between bg-white sticky top-0 z-10 shadow-sm">
-          <div>
-            <h1 className="text-slate-800 font-bold text-lg">Students</h1>
-            <p className="text-slate-500 text-xs font-medium">{students.length} total registered</p>
+        <div className="border-b border-sky-100 px-4 lg:px-10 py-5 flex items-center justify-between bg-white sticky top-0 z-10 shadow-sm">
+          <div className="flex items-center gap-3">
+            <button onClick={() => setIsSidebarOpen(true)} className="lg:hidden text-slate-500 hover:text-sky-600 focus:outline-none">
+               <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" /></svg>
+            </button>
+            <div>
+              <h1 className="text-slate-800 font-bold text-lg">Students</h1>
+              <p className="text-slate-500 text-xs font-medium hidden sm:block">{students.length} total registered</p>
+            </div>
           </div>
           <button
             onClick={() => { setShowForm(true); setEditStudent(null); setForm({ username: '', email: '', password: '', studentId: '' }) }}
@@ -97,7 +103,7 @@ const AdminStudents = () => {
           </button>
         </div>
 
-        <div className="px-10 py-8 max-w-7xl mx-auto">
+        <div className="px-4 lg:px-10 py-8 max-w-7xl mx-auto">
           {/* Message */}
           {msg.text && (
             <div className={`text-sm font-medium px-5 py-3.5 rounded-xl mb-6 border shadow-sm ${msg.type === 'error'

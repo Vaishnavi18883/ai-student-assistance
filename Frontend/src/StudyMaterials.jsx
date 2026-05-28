@@ -125,13 +125,13 @@ function StudyMaterials() {
 
       {/* Topbar */}
       <nav className="bg-white border-b border-sky-100 sticky top-0 z-10 shadow-sm">
-        <div className="max-w-6xl mx-auto px-6 h-14 flex items-center gap-3">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 h-14 flex items-center gap-3">
           <Link to="/dashboard" className="text-slate-400 hover:text-sky-600 text-xl leading-none transition-colors">←</Link>
           <span className="font-semibold text-base text-slate-800">📚 Study Materials</span>
         </div>
       </nav>
 
-      <div className="max-w-6xl mx-auto px-6 pt-10">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 pt-10">
         {/* Heading */}
 
         <div className="mb-10 text-center">
@@ -148,7 +148,7 @@ function StudyMaterials() {
 
         {/* Upload Section */}
 
-        <div className="bg-white border border-sky-100 rounded-2xl shadow-lg shadow-sky-100/50 p-8 mb-12 max-w-4xl mx-auto">
+        <div className="bg-white border border-sky-100 rounded-2xl shadow-lg shadow-sky-100/50 p-6 sm:p-8 mb-12 max-w-4xl mx-auto">
 
           <h2 className="text-xl font-bold mb-6 text-slate-800 border-b border-sky-50 pb-4">
             Upload New Notes

@@ -63,18 +63,17 @@ const TaskManager = () => {
   return (
     <div className="font-sans min-h-screen bg-app-gradient text-slate-900 pb-12">
 
-      {/* Topbar */}
       <nav className="bg-white border-b border-sky-100 sticky top-0 z-10 shadow-sm">
-        <div className="max-w-4xl mx-auto px-6 h-14 flex items-center gap-3">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 h-14 flex items-center gap-3">
           <Link to="/dashboard" className="text-slate-400 hover:text-sky-600 text-xl leading-none transition-colors">←</Link>
           <span className="font-semibold text-base text-slate-800">✅ Task Manager</span>
         </div>
       </nav>
 
-      <div className="max-w-4xl mx-auto px-6 pt-8">
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 pt-8">
 
      
-        <div className="bg-white border border-sky-100 rounded-xl p-6 shadow-md shadow-sky-100/50 mb-8">
+        <div className="bg-white border border-sky-100 rounded-xl p-5 sm:p-6 shadow-md shadow-sky-100/50 mb-8">
           <h2 className="text-lg font-bold text-slate-800 mb-5 flex items-center gap-2">
             {editId ? ' Edit Task' : 'Add New Task'}
           </h2>

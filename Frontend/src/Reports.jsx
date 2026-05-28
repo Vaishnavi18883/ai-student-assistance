@@ -31,13 +31,13 @@ const Reports = () => {
     <div className="font-sans min-h-screen bg-app-gradient text-slate-900">
 
       <nav className="bg-white border-b border-sky-100 sticky top-0 z-10 shadow-sm">
-        <div className="max-w-5xl mx-auto px-6 h-14 flex items-center gap-3">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 h-14 flex items-center gap-3">
           <Link to="/dashboard" className="text-slate-500 hover:text-sky-600 text-lg transition-colors">←</Link>
           <span className="font-semibold text-base text-slate-800">📊 Reports & Analytics</span>
         </div>
       </nav>
 
-      <div className="max-w-5xl mx-auto py-8 px-6">
+      <div className="max-w-5xl mx-auto py-8 px-4 sm:px-6">
 
         <div className="mb-6">
           <h1 className="text-2xl font-bold text-slate-800 mb-1">Your Progress</h1>
@@ -47,7 +47,7 @@ const Reports = () => {
         {/* Stats */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
           {stats.map((s, i) => (
-            <div key={i} className="bg-white border border-sky-100 rounded-xl p-5 shadow-sm hover:shadow-md transition-shadow">
+            <div key={i} className="bg-white border border-sky-100 rounded-xl p-4 sm:p-5 shadow-sm hover:shadow-md transition-shadow">
               <p className={`text-3xl font-bold mb-1 ${s.textColor}`}>{s.value}</p>
               <p className="text-sm text-slate-500">{s.label}</p>
             </div>

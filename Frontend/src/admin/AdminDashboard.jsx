@@ -4,7 +4,7 @@ import { useNavigate, Link, useLocation } from 'react-router-dom'
 import profileGif from '../assets/Gif/profile.gif'
 import taskGif from '../assets/Gif/task.gif'
 
-export const Sidebar = ({ admin, onLogout }) => {
+export const Sidebar = ({ admin, onLogout, isOpen, setIsOpen }) => {
   const { pathname } = useLocation()
   const links = [
     { label: 'Dashboard', path: '/admin/dashboard', icon: '▪' },
@@ -12,15 +12,28 @@ export const Sidebar = ({ admin, onLogout }) => {
     { label: 'Tasks', path: '/admin/tasks', icon: '▪' },
   ]
   return (
-    <aside className="w-64 min-h-screen bg-white border-r border-sky-100 flex flex-col shadow-sm">
-      <div className="px-6 py-6 border-b border-sky-50">
-        <div className="flex items-center gap-3">
-          <div className="w-8 h-8 bg-sky-600 rounded-lg flex items-center justify-center flex-shrink-0 shadow-sm">
-            <span className="text-white text-sm font-black">A</span>
+    <>
+      {/* Mobile overlay */}
+      {isOpen && (
+        <div 
+          className="fixed inset-0 bg-slate-900/50 z-40 lg:hidden"
+          onClick={() => setIsOpen && setIsOpen(false)}
+        />
+      )}
+      <aside className={`fixed lg:static top-0 left-0 z-50 w-64 min-h-screen bg-white border-r border-sky-100 flex flex-col shadow-sm transition-transform duration-300 ${isOpen ? 'translate-x-0' : '-translate-x-full'} lg:translate-x-0`}>
+        <div className="px-6 py-6 border-b border-sky-50 flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <div className="w-8 h-8 bg-sky-600 rounded-lg flex items-center justify-center flex-shrink-0 shadow-sm">
+              <span className="text-white text-sm font-black">A</span>
+            </div>
+            <span className="text-slate-800 font-bold text-lg tracking-tight">Admin </span>
           </div>
-          <span className="text-slate-800 font-bold text-lg tracking-tight">Admin </span>
+          {isOpen && (
+            <button onClick={() => setIsOpen(false)} className="lg:hidden text-slate-400 hover:text-slate-600">
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
+            </button>
+          )}
         </div>
-      </div>
       <nav className="flex-1 px-4 py-6 space-y-1">
         <p className="text-slate-400 text-[10px] font-bold uppercase tracking-widest px-3 mb-4">Navigation</p>
         {links.map(l => {
@@ -56,6 +69,7 @@ export const Sidebar = ({ admin, onLogout }) => {
         </button>
       </div>
     </aside>
+    </>
   )
 }
 
@@ -76,6 +90,7 @@ const AdminDashboard = () => {
   const admin = JSON.parse(localStorage.getItem('admin') || '{}')
   const [stats, setStats] = useState(null)
   const [error, setError] = useState('')
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false)
 
   useEffect(() => {
     if (!token) { navigate('/admin/login'); return }
@@ -94,21 +109,26 @@ const AdminDashboard = () => {
 
   return (
     <div className="font-sans min-h-screen bg-app-gradient text-slate-800 flex">
-      <Sidebar admin={admin} onLogout={handleLogout} />
+      <Sidebar admin={admin} onLogout={handleLogout} isOpen={isSidebarOpen} setIsOpen={setIsSidebarOpen} />
 
       <main className="flex-1 overflow-y-auto">
   
-        <div className="border-b border-sky-100 px-10 py-5 flex items-center justify-between bg-white sticky top-0 z-10 shadow-sm">
-          <div>
-            <h1 className="text-slate-800 font-bold text-lg">Dashboard</h1>
-            <p className="text-slate-500 text-xs font-medium">{today}</p>
+        <div className="border-b border-sky-100 px-6 lg:px-10 py-5 flex items-center justify-between bg-white sticky top-0 z-10 shadow-sm">
+          <div className="flex items-center gap-4">
+            <button onClick={() => setIsSidebarOpen(true)} className="lg:hidden text-slate-500 hover:text-sky-600 focus:outline-none">
+               <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" /></svg>
+            </button>
+            <div>
+              <h1 className="text-slate-800 font-bold text-lg">Dashboard</h1>
+              <p className="text-slate-500 text-xs font-medium hidden sm:block">{today}</p>
+            </div>
           </div>
           <span className="text-xs bg-sky-100 text-sky-700 border border-sky-200 px-3 py-1.5 rounded-full font-bold uppercase tracking-wider">
             Admin
           </span>
         </div>
 
-        <div className="px-10 py-8 max-w-7xl mx-auto">
+        <div className="px-6 lg:px-10 py-8 max-w-7xl mx-auto">
         
           <div className="mb-10">
             <h2 className="text-3xl font-extrabold text-slate-800 mb-2">

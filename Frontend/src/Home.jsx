@@ -1,4 +1,5 @@
-import { motion } from "framer-motion";
+import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { Link, useNavigate } from "react-router-dom";
 import chatbotGif from './assets/Gif/chatbot.gif'
 import booksGif from './assets/Gif/books.gif'
@@ -7,6 +8,7 @@ import taskGif from './assets/Gif/task.gif'
 export default function HomePage() {
   const navigate = useNavigate();
   const isLoggedIn = localStorage.getItem("token");
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const handleProtectedRoute = (path) => {
     if (!isLoggedIn) navigate("/login");
@@ -17,10 +19,12 @@ export default function HomePage() {
     <div className="font-sans bg-app-gradient min-h-screen text-slate-900">
 
       {/* Navbar */}
-      <nav className="bg-white border-b border-sky-100 sticky top-0 z-50 shadow-sm">
+      <nav className="bg-white border-b border-sky-100 sticky top-0 z-50 shadow-sm relative">
         <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
           <span className="font-bold text-xl text-sky-700 tracking-tight">📚 Student AI</span>
-          <div className="flex gap-6 items-center">
+          
+          {/* Desktop Nav */}
+          <div className="hidden md:flex gap-6 items-center">
             <Link to="/" className="text-slate-600 hover:text-sky-600 font-medium transition-colors text-sm">Home</Link>
             <button onClick={() => handleProtectedRoute("/dashboard")} className="text-slate-600 hover:text-sky-600 font-medium transition-colors text-sm">Dashboard</button>
             <Link to="/login" className="text-slate-600 hover:text-sky-600 font-medium transition-colors text-sm">Login</Link>
@@ -28,7 +32,42 @@ export default function HomePage() {
               Get Started
             </Link>
           </div>
+
+          {/* Mobile Menu Toggle */}
+          <button 
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            className="md:hidden text-slate-600 hover:text-sky-600 focus:outline-none"
+          >
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              {mobileMenuOpen ? (
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              ) : (
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+              )}
+            </svg>
+          </button>
         </div>
+
+        {/* Mobile Nav Dropdown */}
+        <AnimatePresence>
+          {mobileMenuOpen && (
+            <motion.div 
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: "auto" }}
+              exit={{ opacity: 0, height: 0 }}
+              className="md:hidden bg-white border-t border-sky-100 overflow-hidden shadow-lg absolute w-full"
+            >
+              <div className="flex flex-col px-6 py-4 gap-4">
+                <Link to="/" onClick={() => setMobileMenuOpen(false)} className="text-slate-600 font-medium text-base">Home</Link>
+                <button onClick={() => { handleProtectedRoute("/dashboard"); setMobileMenuOpen(false); }} className="text-left text-slate-600 font-medium text-base">Dashboard</button>
+                <Link to="/login" onClick={() => setMobileMenuOpen(false)} className="text-slate-600 font-medium text-base">Login</Link>
+                <Link to="/register" onClick={() => setMobileMenuOpen(false)} className="bg-sky-600 hover:bg-sky-700 text-white px-5 py-2.5 rounded-lg text-center font-bold shadow-md mt-2">
+                  Get Started
+                </Link>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </nav>
 
       {/* Hero */}
@@ -37,7 +76,7 @@ export default function HomePage() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
-          className="text-5xl md:text-6xl font-extrabold mb-6 leading-tight text-slate-800"
+          className="text-4xl sm:text-5xl md:text-6xl font-extrabold mb-6 leading-tight text-slate-800"
         >
           Learn Smarter with AI
         </motion.h1>

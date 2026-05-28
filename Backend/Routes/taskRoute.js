@@ -27,6 +27,16 @@ router.get("/", async (req, res) => {
   }
 });
 
+router.get("/user/:learnerId", async (req, res) => {
+  try {
+    const tasks = await Task.find({ learnerId: req.params.learnerId });
+    res.json(tasks);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: "Server Error" });
+  }
+});
+
 
 router.put("/:id", async (req, res) => {
   try {

@@ -35,9 +35,8 @@ function Dashboard() {
   return (
     <div className="font-sans min-h-screen bg-app-gradient text-slate-900 pb-16">
 
-      {/* Topbar */}
       <nav className="bg-white border-b border-sky-100 sticky top-0 z-20 shadow-sm">
-        <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
           <span className="font-bold text-xl text-sky-700 tracking-tight">📚 Student AI</span>
           <div className="flex items-center gap-4">
             <span className="text-sm text-slate-500 hidden sm:block">
@@ -51,7 +50,7 @@ function Dashboard() {
         </div>
       </nav>
 
-      <div className="max-w-6xl mx-auto px-6 pt-10">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 pt-10">
 
         {/* Welcome + Stats */}
         <div className="flex flex-col lg:flex-row gap-8 mb-12 justify-between items-start">
@@ -66,7 +65,7 @@ function Dashboard() {
               { label: "Completed", value: completed, color: "text-emerald-600", bg: "bg-emerald-50", border: "border-emerald-100" },
               { label: "Pending", value: pending, color: "text-amber-600", bg: "bg-amber-50", border: "border-amber-100" },
             ].map((s, i) => (
-              <div key={i} className={`bg-white border ${s.border} rounded-2xl p-5 min-w-[120px] text-center shadow-sm hover:shadow-md transition-shadow`}>
+              <div key={i} className={`bg-white border ${s.border} rounded-2xl p-4 sm:p-5 min-w-[120px] text-center shadow-sm hover:shadow-md transition-shadow flex-1 sm:flex-none`}>
                 <p className={`text-3xl font-bold mb-1 ${s.color}`}>{s.value}</p>
                 <p className="text-xs font-semibold text-slate-500 uppercase tracking-wide">{s.label}</p>
               </div>
